@@ -1,0 +1,15 @@
+.main-content{
+
+    margin-top:60px;
+
+    padding:25px;
+
+    transition:.3s;
+
+}
+
+.main-content.shift{
+
+    margin-left:250px;
+
+}

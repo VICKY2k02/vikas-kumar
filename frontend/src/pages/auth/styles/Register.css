@@ -1,0 +1,61 @@
+.register-page{
+    min-height:10%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#f4f6f9;
+    padding:20px;
+}
+
+.register-card{
+    width:100%;
+    max-width:600px;
+    padding:28px !important;
+    border-radius:16px !important;
+    box-shadow:0 8px 25px rgba(0,0,0,.12) !important;
+}
+
+.register-title{
+    text-align:center;
+    font-size:28px !important;
+    font-weight:700 !important;
+    color:#1976d2;
+    margin-bottom:6px !important;
+}
+
+.register-subtitle{
+    text-align:center;
+    color:#666;
+    margin-bottom:24px !important;
+    font-size:15px;
+}
+
+.register-card .MuiTextField-root{
+    margin-bottom:8px;
+}
+
+.register-card .MuiOutlinedInput-root{
+    border-radius:10px;
+}
+
+.register-btn{
+    height:48px;
+    margin-top:12px !important;
+    border-radius:10px !important;
+    font-size:16px !important;
+    font-weight:600 !important;
+    text-transform:none !important;
+}
+
+@media (max-width:768px){
+
+    .register-card{
+        max-width:95%;
+        padding:20px !important;
+    }
+
+    .register-title{
+        font-size:24px !important;
+    }
+
+}

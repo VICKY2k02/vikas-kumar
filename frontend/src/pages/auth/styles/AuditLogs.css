@@ -1,0 +1,130 @@
+/* ===========================
+   Audit Logs Page
+=========================== */
+
+.page {
+    padding: 30px;
+    background: #f4f7fb;
+    min-height: 100vh;
+}
+
+.page h2 {
+    margin-bottom: 20px;
+    color: #1f2937;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+/* ===========================
+   Table Container
+=========================== */
+
+.audit-table-container {
+    background: #fff;
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+}
+
+/* ===========================
+   Table
+=========================== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 950px;
+}
+
+thead {
+    background: #2563eb;
+    color: white;
+}
+
+thead th {
+    padding: 16px;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+tbody tr {
+    transition: 0.25s;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+tbody tr:hover {
+    background: #eef5ff;
+}
+
+tbody td {
+    padding: 15px;
+    color: #374151;
+    font-size: 14px;
+}
+
+/* ===========================
+   Action Badge
+=========================== */
+
+.action-badge {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1d4ed8;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 768px) {
+
+    .page {
+        padding: 15px;
+    }
+
+    .page h2 {
+        font-size: 22px;
+    }
+
+    table {
+        min-width: 700px;
+    }
+}
+
+
+
+
+
+
+
+.audit-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.clear-btn{
+    background:#ef4444;
+    color:#fff;
+    border:none;
+    padding:10px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.clear-btn:hover{
+    background:#dc2626;
+}

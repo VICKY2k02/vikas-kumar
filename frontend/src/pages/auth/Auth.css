@@ -1,0 +1,105 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #f4f6f9;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #1976d2, #42a5f5);
+}
+
+.auth-paper {
+    width: 100%;
+    max-width: 450px;
+    border-radius: 18px !important;
+    padding: 35px !important;
+    box-shadow: 0 10px 35px rgba(0,0,0,.18) !important;
+}
+
+.auth-title {
+    font-size: 32px !important;
+    font-weight: bold !important;
+    color: #1976d2;
+    text-align: center;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px !important;
+}
+
+.auth-btn {
+    margin-top: 25px !important;
+    height: 50px;
+    font-size: 16px !important;
+    font-weight: bold !important;
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.auth-link a {
+    color: #1976d2;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+.register-paper {
+    width: 100%;
+    max-width: 900px;
+    border-radius: 18px !important;
+    padding: 40px !important;
+    box-shadow: 0 10px 35px rgba(0,0,0,.18) !important;
+}
+
+.register-title {
+    text-align: center;
+    font-size: 34px !important;
+    color: #1976d2;
+    margin-bottom: 30px !important;
+    font-weight: bold !important;
+}
+
+.register-btn {
+    margin-top: 20px !important;
+    height: 52px;
+    font-size: 17px !important;
+    font-weight: bold !important;
+}
+
+.MuiTextField-root {
+    margin-bottom: 10px !important;
+}
+
+@media(max-width:768px){
+
+.auth-paper{
+    padding:25px !important;
+}
+
+.register-paper{
+    padding:25px !important;
+}
+
+.register-title{
+    font-size:28px !important;
+}
+
+.auth-title{
+    font-size:28px !important;
+}
+
+}
