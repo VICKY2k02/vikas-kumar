@@ -12,6 +12,10 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "../../pages/auth/styles/sidebar.css";
 import { logoutUser } from "../../api/authApi";
 
+import CategoryIcon from "@mui/icons-material/Category";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
+
+
 interface SidebarProps {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -68,6 +72,17 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                 <span>Dashboard</span>
             </NavLink>
 
+
+            {/* Profile */}
+
+            <NavLink
+                to="/profile"
+                onClick={closeSidebar}
+            >
+                <Person />
+                <span>Profile</span>
+            </NavLink>
+
             {/* Add User */}
 
             {(user.role === "Company Admin" ||
@@ -89,13 +104,31 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                 user.role === "Super Admin" ||
                 user.role === "Analyst") && (
 
-                    <NavLink
-                        to="/analytics"
-                        onClick={closeSidebar}
-                    >
-                        <Analytics />
-                        <span>Analytics</span>
-                    </NavLink>
+                    <>
+                        <NavLink
+                            to="/analytics"
+                            onClick={closeSidebar}
+                        >
+                            <Analytics />
+                            <span>Analytics</span>
+                        </NavLink>
+
+                        <NavLink
+                            to="/categories"
+                            onClick={closeSidebar}
+                        >
+                            <CategoryIcon />
+                            <span>Categories</span>
+                        </NavLink>
+
+                        <NavLink
+                            to="/products"
+                            onClick={closeSidebar}
+                        >
+                            <Inventory2Icon />
+                            <span>Products</span>
+                        </NavLink>
+                    </>
 
                 )}
 
@@ -114,15 +147,6 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
 
                 )}
 
-            {/* Profile */}
-
-            <NavLink
-                to="/profile"
-                onClick={closeSidebar}
-            >
-                <Person />
-                <span>Profile</span>
-            </NavLink>
 
             {/* Settings */}
 

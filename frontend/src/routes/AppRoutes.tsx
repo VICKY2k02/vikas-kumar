@@ -18,6 +18,8 @@ import AuditLogs from "../pages/AuditLogs";
 import RoleProtectedRoute from "./RoleProtectedRoute";
 import Profile from "../pages/Profile";
 
+import Categories from "../pages/categories/Categories";
+import Products from "../pages/products/Products";
 
 const AppRoutes = () => {
 
@@ -103,6 +105,16 @@ const AppRoutes = () => {
                     path="/profile"
                     element={<Profile />}
                 />
+
+ 
+
+  <Route path="/categories" element={<Categories />} />
+
+<Route
+    path="/products"
+    element={<Products />}
+/>
+ 
 
             </Route>
 

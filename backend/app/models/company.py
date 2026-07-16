@@ -48,7 +48,6 @@ class Company(Base):
     users = relationship(
         "User",
         back_populates="company"
-        # cascade="all, delete"
     )
 
     audit_logs = relationship(
@@ -57,3 +56,14 @@ class Company(Base):
         cascade="all, delete"
     )
 
+    categories = relationship(
+        "Category",
+        back_populates="company",
+        cascade="all, delete"
+    )
+
+    products = relationship(
+        "Product",
+        back_populates="company",
+        cascade="all, delete"
+    )

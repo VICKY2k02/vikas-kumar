@@ -1,78 +1,95 @@
-import { useEffect, useState } from "react";
+import {
+    Box,
+    Typography,
+    Paper,
+    Grid
+} from "@mui/material";
 
-import { getProfile } from "../api/authApi";
+import "../pages/auth/styles/dashboard.css";
 
-import "../pages/auth/styles/profile.css";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
-const Profile = () => {
+const Dashboard = () => {
 
-    const [profile, setProfile] = useState<any>(null);
-
-    useEffect(() => {
-
-        loadProfile();
-
-    }, []);
-
-const loadProfile = async () => {
-    try {
-        const res = await getProfile();
-        setProfile(res.data);
-    } catch (err) {
-        console.error(err);
-    }
-};
-
-    if (!profile) {
-
-        return <h2>Loading...</h2>;
-
-    }
+    const { user } = useContext(AuthContext);
 
     return (
+        <Box className="dashboard-container">
 
-        <div className="profile-page">
+            <Typography className="dashboard-title">
+                RetailPulse Profile
+            </Typography>
 
-            <div className="profile-card">
+            <Typography className="dashboard-subtitle">
+                Welcome, {user?.name}
+            </Typography>
 
-                <h2>User Profile</h2>
+            <Grid container spacing={3}>
 
-                <div className="profile-item">
-                    <strong>Name</strong>
-                    <span>{profile.name}</span>
-                </div>
+                <Grid item xs={12} md={4}>
+                    <Paper className="dashboard-card">
+                        <Typography className="card-title">Name</Typography>
+                        <Typography className="card-value">
+                            {user?.name}
+                        </Typography>
+                    </Paper>
+                </Grid>
 
-                <div className="profile-item">
-                    <strong>Email</strong>
-                    <span>{profile.email}</span>
-                </div>
+                <Grid item xs={12} md={4}>
+                    <Paper className="dashboard-card">
+                        <Typography className="card-title">Email</Typography>
+                        <Typography className="card-value">
+                            {user?.email}
+                        </Typography>
+                    </Paper>
+                </Grid>
 
-                <div className="profile-item">
-                    <strong>Role</strong>
-                    <span>{profile.role}</span>
-                </div>
+                <Grid item xs={12} md={4}>
+                    <Paper className="dashboard-card">
+                        <Typography className="card-title">Role</Typography>
+                        <Typography className="card-value">
+                            {user?.role}
+                        </Typography>
+                    </Paper>
+                </Grid>
 
-                <div className="profile-item">
-                    <strong>Company</strong>
-                    <span>{profile.company}</span>
-                </div>
+                <Grid item xs={12} md={4}>
+                    <Paper className="dashboard-card">
+                        <Typography className="card-title">Company</Typography>
+                        <Typography className="card-value">
+                            {user?.company_name}
+                        </Typography>
+                    </Paper>
+                </Grid>
 
-                <div className="profile-item">
-                    <strong>Last Login</strong>
-                    <span>{profile.last_login}</span>
-                </div>
+                <Grid item xs={12} md={4}>
+                    <Paper className="dashboard-card">
+                        <Typography className="card-title">Last Login</Typography>
+                        <Typography className="card-value">
+                            {new Date().toLocaleString("en-IN", {
+                                dateStyle: "medium",
+                                timeStyle: "medium",
+                            })}
+                        </Typography>
+                    </Paper>
+                </Grid>
 
-                <div className="profile-item">
-                    <strong>Account Status</strong>
-                    <span>{profile.status}</span>
-                </div>
+                <Grid item xs={12} md={4}>
+                    <Paper className="dashboard-card">
+                        <Typography className="card-title">
+                            Account Status
+                        </Typography>
+                        <Typography className="card-value">
+                            {user?.status}
+                        </Typography>
+                    </Paper>
+                </Grid>
 
-            </div>
+            </Grid>
 
-        </div>
-
+        </Box>
     );
-
 };
 
-export default Profile;
+export default Dashboard;

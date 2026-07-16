@@ -1,8 +1,8 @@
 // import {
-//   Box,
-//   Typography,
-//   Paper,
-//   Grid
+//     Box,
+//     Typography,
+//     Paper,
+//     Grid
 // } from "@mui/material";
 
 // import "../../pages/auth/styles/dashboard.css";
@@ -11,209 +11,218 @@
 // import { useContext } from "react";
 // import { AuthContext } from "../../context/AuthContext";
 
+// import { useEffect, useState } from "react";
+// import { getDashboardSummary } from "../../api/dashboardApi";
+
 // const Dashboard = () => {
 
-//   const { user } = useContext(AuthContext);
+//     const { user } = useContext(AuthContext);
+
+//     const [summary, setSummary] = useState<any>({});
+
+//     const loadSummary = async () => {
+//         const res = await getDashboardSummary();
+//         setSummary(res.data);
+//     };
+
+//     useEffect(() => {
+//         loadSummary();
+//     }, []);
 
 
 //     return (
 
-//     <Box className="dashboard-container">
 
-//         <Typography className="dashboard-title">
 
-//             RetailPulse Dashboard
 
-//         </Typography>
 
-//         <Typography className="dashboard-subtitle">
+//         <Box className="dashboard-container">
 
-//             Welcome, {user?.name}
 
-//         </Typography>
 
-//         <Grid container spacing={3}>
+//             <Typography className="dashboard-title">
 
-//             <Grid item xs={12} md={3}>
+//                 RetailPulse Dashboard
 
-//                 <Paper className="dashboard-card">
+//             </Typography>
 
-//                     <Typography className="card-title">
+//             <Typography className="dashboard-subtitle">
 
-//                         Company
+//                 Welcome, {user?.name}
 
-//                     </Typography>
+//             </Typography>
 
-//                     <Typography className="card-value">
+//             <Grid container spacing={3}>
 
-//                         {user?.company_name || user?.company_id}
+//                 <Grid item xs={12} md={3}>
 
-//                     </Typography>
+//                     <Paper className="dashboard-card">
 
-//                 </Paper>
+//                         <Typography className="card-title">
+
+//                             Company
+
+//                         </Typography>
+
+//                         <Typography className="card-value">
+
+//                             {user?.company_name || user?.company_id}
+
+//                         </Typography>
+
+//                     </Paper>
+
+//                 </Grid>
+
+//                 <Grid item xs={12} md={3}>
+
+//                     <Paper className="dashboard-card">
+
+//                         <Typography className="card-title">
+
+//                             Role
+
+//                         </Typography>
+
+//                         <Typography className="card-value">
+
+//                             {user?.role}
+
+//                         </Typography>
+
+//                     </Paper>
+
+//                 </Grid>
+
+//                 <Grid item xs={12} md={3}>
+
+//                     <Paper className="dashboard-card">
+
+//                         <Typography className="card-title">
+
+//                             Status
+
+//                         </Typography>
+
+//                         <Typography className="card-value">
+
+//                             Active
+
+//                         </Typography>
+
+//                     </Paper>
+
+//                 </Grid>
+
+//                 <Grid item xs={12} md={3}>
+
+//                     <Paper className="dashboard-card">
+
+//                         <Typography className="card-title">
+
+//                             Last Login
+
+//                         </Typography>
+
+//                         <Typography className="card-value">
+//                             {new Date().toLocaleString("en-IN", {
+//                                 dateStyle: "medium",
+//                                 timeStyle: "medium",
+//                             })}
+//                         </Typography>
+
+//                     </Paper>
+
+//                 </Grid>
 
 //             </Grid>
 
-//             <Grid item xs={12} md={3}>
+//         </Box>
 
-//                 <Paper className="dashboard-card">
-
-//                     <Typography className="card-title">
-
-//                         Role
-
-//                     </Typography>
-
-//                     <Typography className="card-value">
-
-//                         {user?.role}
-
-//                     </Typography>
-
-//                 </Paper>
-
-//             </Grid>
-
-//             <Grid item xs={12} md={3}>
-
-//                 <Paper className="dashboard-card">
-
-//                     <Typography className="card-title">
-
-//                         Status
-
-//                     </Typography>
-
-//                     <Typography className="card-value">
-
-//                         Active
-
-//                     </Typography>
-
-//                 </Paper>
-
-//             </Grid>
-
-//             <Grid item xs={12} md={3}>
-
-//                 <Paper className="dashboard-card">
-
-//                     <Typography className="card-title">
-
-//                         Last Login
-
-//                     </Typography>
-
-//                     <Typography className="card-value">
-
-//                         {user?.last_login || "Today"}
-
-//                     </Typography>
-
-//                 </Paper>
-
-//             </Grid>
-
-//         </Grid>
-
-//     </Box>
-
-// );
+//     );
 
 // };
 
 // export default Dashboard;
-import {
-  Box,
-  Typography,
-  Paper,
-  Grid
-} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Paper, Typography, Grid } from "@mui/material";
 
-import "../../pages/auth/styles/dashboard.css";
+import { getDashboardSummary } from "../../api/dashboardApi";
 
-import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import "../auth/styles/dashboard.css";
 
-const Dashboard = () => {
+export default function DashboardSummary() {
+    const [summary, setSummary] = useState<any>({
+        total_categories: 0,
+        total_products: 0,
+        active_products: 0,
+        inactive_products: 0,
+        total_stock: 0,
+        inventory_value: 0
+    });
 
-  const { user } = useContext(AuthContext);
+    useEffect(() => {
+        loadSummary();
+    }, []);
 
-  return (
-    <Box className="dashboard-container">
+    const loadSummary = async () => {
+        const res = await getDashboardSummary();
+        setSummary(res.data);
+    };
 
-      <Typography className="dashboard-title">
-        RetailPulse Dashboard
-      </Typography>
+    const cards = [
+        {
+            title: "Categories",
+            value: summary.total_categories
+        },
+        {
+            title: "Products",
+            value: summary.total_products
+        },
+        {
+            title: "Active Products",
+            value: summary.active_products
+        },
+        {
+            title: "Inactive Products",
+            value: summary.inactive_products
+        },
+        {
+            title: "Total Stock",
+            value: summary.total_stock
+        },
+        {
+            title: "Inventory Value",
+            value: `₹${summary.inventory_value}`
+        }
+    ];
 
-      <Typography className="dashboard-subtitle">
-        Welcome, {user?.name}
-      </Typography>
+    return (
+        <Grid
+            container
+            spacing={2}
+            className="summary-grid"
+        >
+            {cards.map((card) => (
+                <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={2}
+                    key={card.title}
+                >
+                    <Paper className="summary-card">
+                        <Typography className="summary-title">
+                            {card.title}
+                        </Typography>
 
-      <Grid container spacing={3}>
-
-        <Grid item xs={12} md={4}>
-          <Paper className="dashboard-card">
-            <Typography className="card-title">Name</Typography>
-            <Typography className="card-value">
-              {user?.name}
-            </Typography>
-          </Paper>
+                        <Typography className="summary-value">
+                            {card.value}
+                        </Typography>
+                    </Paper>
+                </Grid>
+            ))}
         </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Paper className="dashboard-card">
-            <Typography className="card-title">Email</Typography>
-            <Typography className="card-value">
-              {user?.email}
-            </Typography>
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Paper className="dashboard-card">
-            <Typography className="card-title">Role</Typography>
-            <Typography className="card-value">
-              {user?.role}
-            </Typography>
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Paper className="dashboard-card">
-            <Typography className="card-title">Company</Typography>
-            <Typography className="card-value">
-              {user?.company_name}
-            </Typography>
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Paper className="dashboard-card">
-            <Typography className="card-title">Last Login</Typography>
-            <Typography className="card-value">
-              {user?.last_login
-                ? new Date(user.last_login).toLocaleString()
-                : "First Login"}
-            </Typography>
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Paper className="dashboard-card">
-            <Typography className="card-title">
-              Account Status
-            </Typography>
-            <Typography className="card-value">
-              {user?.status}
-            </Typography>
-          </Paper>
-        </Grid>
-
-      </Grid>
-
-    </Box>
-  );
-};
-
-export default Dashboard;
+    );
+}

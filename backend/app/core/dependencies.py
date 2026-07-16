@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError, ExpiredSignatureError
 from sqlalchemy.orm import Session
-
+from datetime import datetime
 from app.core.database import get_db
 from app.core.security import SECRET_KEY, ALGORITHM
 from app.models.user import User
@@ -15,10 +15,12 @@ oauth2_scheme = OAuth2PasswordBearer(
 def get_current_user(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db)
+    
 ):
+    print("=" * 50)
+    print("SERVER UTC :", datetime.utcnow())
+    print("TOKEN :", token)
 
-    print("="*30)
-    print(token)
 
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -27,13 +29,28 @@ def get_current_user(
 
     try:
 
+     
+
+        print("SECRET_KEY:", SECRET_KEY)
+        print("ALGORITHM:", ALGORITHM)
+
+        claims = jwt.get_unverified_claims(token)
+        print("UNVERIFIED CLAIMS:", claims)
+
         payload = jwt.decode(
             token,
             SECRET_KEY,
-            algorithms=[ALGORITHM]
+            algorithms=[ALGORITHM],
+            options={
+                "verify_exp": False
+            }
         )
 
-        print("PAYLOAD:", payload)
+        print("DECODED:", payload)
+
+        print("TOKEN EXP :", payload["exp"])
+        print("CURRENT TIMESTAMP :", int(datetime.utcnow().timestamp()))
+        print("=" * 50)
 
         user_id = payload.get("user_id")
 

@@ -1,0 +1,76 @@
+.product-table {
+    margin-top: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.product-table .MuiTableHead-root {
+    background-color: #1976d2;
+}
+
+.product-table .MuiTableHead-root .MuiTableCell-root {
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    text-align: center;
+}
+
+.product-table .MuiTableBody-root .MuiTableRow-root:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.product-table .MuiTableBody-root .MuiTableRow-root:hover {
+    background-color: #e3f2fd;
+    transition: 0.3s;
+}
+
+.product-table .MuiTableCell-root {
+    text-align: center;
+    vertical-align: middle;
+    padding: 14px;
+    font-size: 14px;
+}
+
+.product-table .MuiChip-root {
+    font-weight: 600;
+    min-width: 85px;
+}
+
+.product-table .MuiIconButton-root {
+    margin: 0 3px;
+    transition: all 0.3s ease;
+}
+
+.product-table .MuiIconButton-root:hover {
+    transform: scale(1.15);
+}
+
+.product-table .MuiTableBody-root .MuiTableRow-root {
+    transition: background-color 0.3s ease;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    .product-table {
+        overflow-x: auto;
+    }
+
+    .product-table .MuiTableCell-root {
+        padding: 10px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .product-table .MuiTableHead-root .MuiTableCell-root {
+        font-size: 13px;
+    }
+
+    .product-table .MuiChip-root {
+        min-width: 70px;
+        font-size: 12px;
+    }
+
+}
