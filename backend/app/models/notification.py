@@ -7,15 +7,14 @@ from sqlalchemy import (
 )
 
 from sqlalchemy.orm import relationship
-
 from datetime import datetime
 
 from app.core.database import Base
 
 
-class AuditLog(Base):
+class Notification(Base):
 
-    __tablename__ = "audit_logs"
+    __tablename__ = "notifications"
 
     id = Column(
         Integer,
@@ -28,22 +27,15 @@ class AuditLog(Base):
         ForeignKey("companies.id")
     )
 
-    user_id = Column(
+    title = Column(String)
+
+    message = Column(String)
+
+    type = Column(String)
+
+    is_read = Column(
         Integer,
-        ForeignKey("users.id")
-    )
-
-    action = Column(
-        String,
-        nullable=False
-    )
-
-    ip_address = Column(
-        String
-    )
-
-    browser = Column(
-        String
+        default=0
     )
 
     created_at = Column(
@@ -53,14 +45,5 @@ class AuditLog(Base):
 
     company = relationship(
         "Company",
-        back_populates="audit_logs"
+        back_populates="notifications"
     )
-
-    user = relationship(
-        "User",
-        back_populates="audit_logs"
-    )
-
-    invoice_number = Column(String, nullable=True)
-
-    product_name = Column(String, nullable=True)

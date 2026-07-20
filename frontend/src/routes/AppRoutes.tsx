@@ -21,6 +21,10 @@ import Profile from "../pages/Profile";
 import Categories from "../pages/categories/Categories";
 import Products from "../pages/products/Products";
 
+import Sales from "../pages/sales/Sales";
+
+
+
 const AppRoutes = () => {
 
     return (
@@ -106,15 +110,23 @@ const AppRoutes = () => {
                     element={<Profile />}
                 />
 
- 
+                <Route
+                    path="/sales"
+                    element={<Sales />}
+                />
 
-  <Route path="/categories" element={<Categories />} />
 
-<Route
-    path="/products"
-    element={<Products />}
-/>
- 
+
+                <Route
+                    path="/categories"
+                    element={<Categories />}
+                />
+
+                <Route
+                    path="/products"
+                    element={<Products />}
+                />
+
 
             </Route>
 

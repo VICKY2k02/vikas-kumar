@@ -71,10 +71,13 @@ const AuditLogs = () => {
 
                     <tr>
                         <th>Company</th>
+                        <th>Invoice</th>
+                        <th>Product</th>
                         <th>User</th>
                         <th>Action</th>
                         <th>IP Address</th>
                         <th>Browser</th>
+                        <th>Performed By</th>
                         <th>Timestamp</th>
                     </tr>
 
@@ -88,6 +91,10 @@ const AuditLogs = () => {
 
                             <td>{log.company}</td>
 
+                            <td>{log.invoice_number}</td>
+
+                            <td>{log.product_name}</td>
+
                             <td>{log.user}</td>
 
                             <td>{log.action}</td>
@@ -95,6 +102,8 @@ const AuditLogs = () => {
                             <td>{log.ip_address}</td>
 
                             <td>{log.browser}</td>
+
+                            <td>{log.performed_by}</td>
 
                             <td>{log.timestamp}</td>
 

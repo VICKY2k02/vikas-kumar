@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException
 from sqlalchemy.orm import Session
 
 from app.schemas.auth_schema import CompanyRegister
@@ -131,11 +131,29 @@ def reset(
     )
 
 
+
+
 @router.post("/register-user")
 def register_new_user(
     data: UserRegisterSchema,
     db: Session = Depends(get_db)
 ):
+
+    # ----------------------------
+    # Role Validation
+    # ----------------------------
+    allowed_roles = [
+        "Super Admin",
+        "Company Admin",
+        "Analyst",
+        "User"
+    ]
+
+    if data.role not in allowed_roles:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid Role"
+        )
 
     return register_user(
         db,

@@ -30,87 +30,95 @@ export default function ProductTable({
   return (
 
     <TableContainer
-    component={Paper}
-    className="product-table"
->
+      component={Paper}
+      className="product-table"
+    >
 
-    <Table>
+      <Table>
 
-      <TableHead>
+        <TableHead>
 
-        <TableRow>
+          <TableRow>
 
-          <TableCell>Name</TableCell>
+            <TableCell>Name</TableCell>
 
-          <TableCell>SKU</TableCell>
+            <TableCell>SKU</TableCell>
 
-          <TableCell>Brand</TableCell>
+            <TableCell>Brand</TableCell>
 
-          <TableCell>Price</TableCell>
+            <TableCell>Price</TableCell>
 
-          <TableCell>Stock</TableCell>
+            <TableCell>Stock</TableCell>
 
-          <TableCell>Status</TableCell>
+            <TableCell>Status</TableCell>
 
-          <TableCell>Actions</TableCell>
-
-        </TableRow>
-
-      </TableHead>
-
-      <TableBody>
-
-        {products.map((p) => (
-
-          <TableRow key={p.id}>
-
-            <TableCell>{p.name}</TableCell>
-
-            <TableCell>{p.sku}</TableCell>
-
-            <TableCell>{p.brand}</TableCell>
-
-            <TableCell>₹{p.unit_price}</TableCell>
-
-            <TableCell>{p.stock_quantity}</TableCell>
-
-            <TableCell>
-
-              <Chip
-                label={p.status}
-                color={
-                  p.status === "Active"
-                    ? "success"
-                    : "default"
-                }
-              />
-
-            </TableCell>
-
-            <TableCell>
-
-              <IconButton
-                onClick={() => onEdit(p)}
-              >
-                <EditIcon />
-              </IconButton>
-
-              <IconButton
-                color="error"
-                onClick={() => onDelete(p.id)}
-              >
-                <DeleteIcon />
-              </IconButton>
-
-            </TableCell>
+            <TableCell>Actions</TableCell>
 
           </TableRow>
 
-        ))}
+        </TableHead>
 
-      </TableBody>
+        <TableBody>
 
-    </Table>
+          {products.map((p) => (
+
+            <TableRow key={p.id}>
+
+              <TableCell>{p.name}</TableCell>
+
+              <TableCell>{p.sku}</TableCell>
+
+              <TableCell>{p.brand}</TableCell>
+
+              <TableCell>₹{p.unit_price}</TableCell>
+
+              <TableCell>{p.stock_quantity}</TableCell>
+
+              <TableCell>
+                <Chip
+                  label={
+                    p.stock_quantity <= 0
+                      ? "Out of Stock"
+                      : p.status
+                  }
+                  sx={{
+                    bgcolor:
+                      p.stock_quantity <= 0
+                        ? "#d32f2f"
+                        : p.status === "Active"
+                          ? "#2e7d32"
+                          : "#f57c00",
+                          
+                    color: "#fff",
+                    fontWeight: 600
+                  }}
+                />
+              </TableCell>
+
+              <TableCell>
+
+                <IconButton
+                  onClick={() => onEdit(p)}
+                >
+                  <EditIcon />
+                </IconButton>
+
+                <IconButton
+                  color="error"
+                  onClick={() => onDelete(p.id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+
+              </TableCell>
+
+            </TableRow>
+
+          ))}
+
+        </TableBody>
+
+      </Table>
     </TableContainer>
   );
 

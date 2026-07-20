@@ -14,7 +14,7 @@ import { logoutUser } from "../../api/authApi";
 
 import CategoryIcon from "@mui/icons-material/Category";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
-
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 
 interface SidebarProps {
     open: boolean;
@@ -127,6 +127,15 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                         >
                             <Inventory2Icon />
                             <span>Products</span>
+                        </NavLink>
+
+
+                        <NavLink
+                            to="/sales"
+                            onClick={closeSidebar}
+                        >
+                            <PointOfSaleIcon />
+                            <span>Sales</span>
                         </NavLink>
                     </>
 

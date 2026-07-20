@@ -9,6 +9,15 @@ from app.models.product import Product
 from app.models.category import Category
 from app.models.audit_log import AuditLog
 
+from app.models.notification import Notification
+from app.core.dependencies import (
+    get_current_user,
+    require_roles
+)
+
+
+LOW_STOCK_LIMIT = 5
+
 router = APIRouter(
     prefix="/products",
     tags=["Products"]
@@ -19,7 +28,13 @@ router = APIRouter(
 def create_product(
     data: dict,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user)
+    # current_user=Depends(get_current_user)
+    current_user=Depends(
+        require_roles(
+            "Super Admin",
+            "Company Admin"
+        )
+    )
 ):
 
     if data["unit_price"] <= 0:
@@ -107,7 +122,15 @@ def get_products(
     brand: str = "",
     status: str = "",
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user)
+    # current_user=Depends(get_current_user)
+    current_user=Depends(
+        require_roles(
+            "Super Admin",
+            "Company Admin",
+            "Analyst",
+            "User"
+        )
+    )
 ):
 
     query = db.query(Product).filter(
@@ -135,6 +158,12 @@ def get_products(
 
     for p in products:
 
+        print(
+            p.name,
+            p.status,
+            p.stock_quantity
+        )
+
         cat = db.query(Category).filter(
             Category.id == p.category_id
         ).first()
@@ -160,7 +189,15 @@ def get_products(
 def get_product(
     product_id: int,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user)
+    # current_user=Depends(get_current_user)
+        current_user=Depends(
+        require_roles(
+            "Super Admin",
+            "Company Admin",
+            "Analyst",
+            "User"
+        )
+    )
 ):
 
     product = db.query(Product).filter(
@@ -174,19 +211,28 @@ def get_product(
     return product
 
 
+
+
 @router.put("/{product_id}")
 def update_product(
     product_id: int,
     data: dict,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user)
+    # current_user=Depends(get_current_user)
+    current_user=Depends(
+        require_roles(
+            "Super Admin",
+            "Company Admin"
+            
+        )
+    )
+    
 ):
 
     product = db.query(Product).filter(
         Product.id == product_id,
         Product.company_id == current_user.company_id
     ).first()
-
 
     existing_sku = db.query(Product).filter(
         Product.company_id == current_user.company_id,
@@ -201,7 +247,10 @@ def update_product(
         )
 
     if not product:
-        raise HTTPException(404, "Product not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Product not found"
+        )
 
     product.name = data["name"]
     product.category_id = data.get(
@@ -210,14 +259,50 @@ def update_product(
     )
     product.brand = data["brand"]
     product.description = data.get("description", "")
-    product.unit_price = data["unit_price"]
-    product.cost_price = data["cost_price"]
-    product.stock_quantity = data["stock_quantity"]
+    product.unit_price = float(data["unit_price"])
+    product.cost_price = float(data["cost_price"])
+    product.stock_quantity = int(data["stock_quantity"])
     product.unit_of_measure = data["unit_of_measure"]
-    product.status = data["status"]
 
-    db.commit()
+    # -----------------------------
+    # Auto Status + Notifications
+    # -----------------------------
+    qty = product.stock_quantity
 
+    if qty <= 0:
+
+        product.stock_quantity = 0
+        product.status = "Out of Stock"
+
+        db.add(
+            Notification(
+                company_id=current_user.company_id,
+                title="Out of Stock",
+                message=f"{product.name} is Out of Stock",
+                type="danger"
+            )
+        )
+
+    elif qty <= LOW_STOCK_LIMIT:
+
+        product.status = "Active"
+
+        db.add(
+            Notification(
+                company_id=current_user.company_id,
+                title="Low Stock Alert",
+                message=f"{product.name} has only {qty} items remaining",
+                type="warning"
+            )
+        )
+
+    else:
+
+        product.status = data["status"]
+
+    # -----------------------------
+    # Audit Log
+    # -----------------------------
     db.add(
         AuditLog(
             company_id=current_user.company_id,
@@ -237,7 +322,14 @@ def update_product(
 def delete_product(
     product_id: int,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user)
+    # current_user=Depends(get_current_user)
+    current_user=Depends(
+        require_roles(
+            "Super Admin",
+            "Company Admin"
+             
+        )
+    )
 ):
 
     product = db.query(Product).filter(
@@ -273,7 +365,13 @@ def change_status(
     product_id: int,
     status: str,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user)
+    # current_user=Depends(get_current_user)
+    current_user=Depends(
+        require_roles(
+            "Super Admin",
+            "Company Admin"
+        )
+    )
 ):
 
     product = db.query(Product).filter(
@@ -308,10 +406,51 @@ def change_status(
     }
 
 
+# @router.get("/dashboard/summary")
+# def dashboard_summary(
+#     db: Session = Depends(get_db),
+#     current_user=Depends(get_current_user)
+# ):
+
+#     total_products = db.query(Product).filter(
+#         Product.company_id == current_user.company_id
+#     ).count()
+
+#     active_products = db.query(Product).filter(
+#         Product.company_id == current_user.company_id,
+#         Product.status == "Active"
+#     ).count()
+
+#     inactive_products = db.query(Product).filter(
+#         Product.company_id == current_user.company_id,
+#         Product.status == "Inactive"
+#     ).count()
+
+#     total_categories = db.query(Category).filter(
+#         Category.company_id == current_user.company_id
+#     ).count()
+
+#     return {
+#         "total_products": total_products,
+#         "active_products": active_products,
+#         "inactive_products": inactive_products,
+#         "total_categories": total_categories
+#     }
+
+
+
 @router.get("/dashboard/summary")
 def dashboard_summary(
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user)
+    # current_user=Depends(get_current_user)
+    current_user=Depends(
+        require_roles(
+            "Super Admin",
+            "Company Admin",
+            "Analyst",
+            "User"
+        )
+    )
 ):
 
     total_products = db.query(Product).filter(
@@ -332,9 +471,30 @@ def dashboard_summary(
         Category.company_id == current_user.company_id
     ).count()
 
+    total_stock = db.query(
+        func.sum(Product.stock_quantity)
+    ).filter(
+        Product.company_id == current_user.company_id
+    ).scalar() or 0
+
+    inventory_value = db.query(
+        func.sum(Product.stock_quantity * Product.cost_price)
+    ).filter(
+        Product.company_id == current_user.company_id
+    ).scalar() or 0
+
     return {
         "total_products": total_products,
         "active_products": active_products,
         "inactive_products": inactive_products,
-        "total_categories": total_categories
+        "total_categories": total_categories,
+        "total_stock": total_stock,
+        "inventory_value": inventory_value
     }
+
+
+
+
+
+
+

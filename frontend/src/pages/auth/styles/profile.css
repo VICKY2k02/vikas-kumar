@@ -1,61 +1,90 @@
-.profile-page{
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    padding:40px;
-
-}
-
-.profile-card{
-
-    width:600px;
-
-    background:#fff;
-
-    border-radius:12px;
-
-    box-shadow:0 6px 15px rgba(0,0,0,.15);
-
+ .dashboard-container{
+    margin-top:62px;
     padding:30px;
-
+    background:#f5f7fb;
+    min-height:100vh;
 }
 
-.profile-card h2{
+.dashboard-title{
+    font-size:30px !important;
+    font-weight:bold !important;
+    color:#1976d2;
+    margin-bottom:5px !important;
+}
 
+.dashboard-subtitle{
+    font-size:16px !important;
+    color:#666;
+    margin-bottom:30px !important;
+}
+
+.dashboard-card{
+    padding:20px;
+    border-radius:12px !important;
     text-align:center;
-
-    margin-bottom:25px;
-
-    color:#1f2937;
-
-}
-
-.profile-item{
+    transition:.3s;
+    cursor:pointer;
+    background:#fff;
+    box-shadow:0 2px 8px rgba(0,0,0,.08) !important;
+    min-height:140px;
 
     display:flex;
-
-    justify-content:space-between;
-
-    padding:14px 0;
-
-    border-bottom:1px solid #e5e7eb;
-
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
 }
 
-.profile-item strong{
-
-    color:#374151;
-
+.dashboard-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 8px 20px rgba(0,0,0,.15) !important;
 }
 
-.profile-item span{
+.card-title{
+    font-size:15px !important;
+    color:#666;
+    margin-bottom:12px !important;
+    font-weight:500 !important;
+}
 
-    color:#4b5563;
+.card-value{
+    font-size:24px !important;
+    font-weight:bold !important;
+    color:#1976d2;
+    word-break:break-word;
+}
 
-    font-weight:500;
+/* Status Colors */
+
+.status-active{
+    color:#2e7d32 !important;
+}
+
+.status-inactive{
+    color:#d32f2f !important;
+}
+
+.status-pending{
+    color:#f57c00 !important;
+}
+
+/* Mobile */
+
+@media(max-width:900px){
+
+    .dashboard-container{
+        padding:20px;
+    }
+
+    .dashboard-title{
+        font-size:26px !important;
+    }
+
+    .dashboard-card{
+        min-height:120px;
+    }
+
+    .card-value{
+        font-size:20px !important;
+    }
 
 }

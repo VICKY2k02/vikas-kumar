@@ -58,8 +58,8 @@ const AddUser = () => {
 
             <Paper
                 sx={{
-                    p:4,
-                    width:500
+                    p: 4,
+                    width: 500
                 }}
             >
 
@@ -134,8 +134,16 @@ const AddUser = () => {
                                     User
                                 </MenuItem>
 
+                                <MenuItem value="Analyst">
+                                    Analyst
+                                </MenuItem>
+
                                 <MenuItem value="Company Admin">
                                     Company Admin
+                                </MenuItem>
+
+                                <MenuItem value="Super Admin">
+                                    Super Admin
                                 </MenuItem>
 
                             </TextField>

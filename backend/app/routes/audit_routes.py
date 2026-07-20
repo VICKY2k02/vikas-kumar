@@ -39,8 +39,14 @@ def get_audit_logs(
             "company": log.company.name if log.company else "",
 
             "user": log.user.name if log.user else "",
+            
+            "invoice_number": log.invoice_number or "",
+
+            "product_name": log.product_name or "",
 
             "action": log.action,
+
+            "performed_by": log.user.name if log.user else "",
 
             "ip_address": log.ip_address,
 
@@ -51,8 +57,6 @@ def get_audit_logs(
             )
 
         }
-
-        
 
         for log in logs
 

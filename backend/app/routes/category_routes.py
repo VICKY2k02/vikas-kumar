@@ -3,7 +3,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 
 from app.core.database import get_db
-from app.core.dependencies import get_current_user
+from app.core.dependencies import (
+    get_current_user,
+    require_roles
+)
 
 from app.models.category import Category
 from app.models.product import Product
@@ -19,7 +22,13 @@ router = APIRouter(
 def create_category(
     data: dict,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user)
+    # current_user=Depends(get_current_user)
+    current_user=Depends(
+        require_roles(
+            "Super Admin",
+            "Company Admin"
+        )
+    )
 ):
 
     exists = db.query(Category).filter(
@@ -121,7 +130,13 @@ def update_category(
     category_id: int,
     data: dict,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user)
+    # current_user=Depends(get_current_user)
+    current_user=Depends(
+        require_roles(
+            "Super Admin",
+            "Company Admin"
+        )
+    )
 ):
 
     category = db.query(Category).filter(
@@ -156,7 +171,13 @@ def update_category(
 def delete_category(
     category_id: int,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user)
+    # current_user=Depends(get_current_user)
+    current_user=Depends(
+        require_roles(
+            "Super Admin",
+            "Company Admin"
+        )
+    )    
 ):
 
     category = db.query(Category).filter(

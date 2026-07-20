@@ -100,3 +100,8 @@ class Product(Base):
         "Category",
         back_populates="products"
     )
+
+
+    stock_quantity = Column(Integer, default=0)
+
+    status = Column(String, default="Active")

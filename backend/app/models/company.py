@@ -67,3 +67,8 @@ class Company(Base):
         back_populates="company",
         cascade="all, delete"
     )
+
+    notifications = relationship(
+        "Notification",
+        back_populates="company"
+    )

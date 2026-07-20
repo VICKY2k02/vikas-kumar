@@ -5,7 +5,7 @@ import {
     Grid
 } from "@mui/material";
 
-import "../pages/auth/styles/dashboard.css";
+import "../pages/auth/styles/profile.css";
 
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";

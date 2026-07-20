@@ -229,15 +229,15 @@ export default function AddProductDialog({
                 >
 
                     <MenuItem value="Active">
-
                         Active
-
                     </MenuItem>
 
                     <MenuItem value="Inactive">
-
                         Inactive
+                    </MenuItem>
 
+                    <MenuItem value="Out of Stock">
+                        Out of Stock
                     </MenuItem>
 
                 </TextField>

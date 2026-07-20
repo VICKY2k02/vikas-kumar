@@ -24,6 +24,15 @@ from app.routes.product_routes import router as product_router
 
 from app.routes.dashboard_routes import router as dashboard_router
 
+from app.models.sale import Sale
+from app.models.sale_item import SaleItem
+from app.routes.sales_routes import router as sales_router
+
+from app.routes.notification_routes import router as notification_router
+
+
+
+
 app = FastAPI(
     title="RetailPulse Analytics API",
     version="1.0.0"
@@ -50,6 +59,11 @@ app.include_router(category_router)
 app.include_router(product_router)
 
 app.include_router(dashboard_router)
+
+app.include_router(sales_router)
+
+app.include_router(notification_router)
+
 
 @app.get("/")
 def root():

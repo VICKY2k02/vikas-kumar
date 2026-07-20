@@ -1,7 +1,7 @@
 import "../../pages/auth/styles/navbar.css";
 
 import MenuIcon from "@mui/icons-material/Menu";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 import { logoutUser } from "../../api/authApi";
 
+import NotificationBell from "./NotificationBell";
 
 interface NavbarProps {
     open: boolean;
@@ -23,30 +24,30 @@ const Navbar = ({ open, setOpen }: NavbarProps) => {
         localStorage.getItem("user") || "{}"
     );
 
-const logout = async () => {
+    const logout = async () => {
 
-    console.log("Logout button clicked");
+        console.log("Logout button clicked");
 
-    try {
+        try {
 
-        console.log("Calling logout API...");
+            console.log("Calling logout API...");
 
-        const res = await logoutUser();
+            const res = await logoutUser();
 
-        console.log("Logout Response:", res.data);
+            console.log("Logout Response:", res.data);
 
-    } catch (err) {
+        } catch (err) {
 
-        console.error("Logout Error:", err);
+            console.error("Logout Error:", err);
 
-    }
+        }
 
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    localStorage.removeItem("user");
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        localStorage.removeItem("user");
 
-    navigate("/login");
-};
+        navigate("/login");
+    };
 
     return (
 
@@ -74,10 +75,11 @@ const logout = async () => {
 
             </div>
 
+
             <div className="nav-right">
 
-                <NotificationsIcon className="nav-icon" />
 
+                <NotificationBell />
                 <div className="user-info">
 
                     <AccountCircleIcon />
@@ -104,6 +106,8 @@ const logout = async () => {
                 </button>
 
             </div>
+
+
 
         </header>
 

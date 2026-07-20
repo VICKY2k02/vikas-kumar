@@ -165,6 +165,10 @@ export default function EditProductDialog({
           <MenuItem value="Inactive">
             Inactive
           </MenuItem>
+
+          <MenuItem value="Out of Stock">
+            Out of Stock
+          </MenuItem>
         </TextField>
 
       </DialogContent>
