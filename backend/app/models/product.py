@@ -104,4 +104,4 @@ class Product(Base):
 
     stock_quantity = Column(Integer, default=0)
 
-    status = Column(String, default="Active")
+    # status = Column(String, default="Active")

@@ -137,6 +137,15 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                             <PointOfSaleIcon />
                             <span>Sales</span>
                         </NavLink>
+
+                        <NavLink
+                            to="/inventory"
+                            onClick={closeSidebar}
+                        >
+                            <Inventory2Icon />
+                            <span>Inventory</span>
+                        </NavLink>
+
                     </>
 
                 )}

@@ -30,7 +30,9 @@ from app.routes.sales_routes import router as sales_router
 
 from app.routes.notification_routes import router as notification_router
 
-
+from app.models.inventory import Inventory
+from app.models.inventory_movement import InventoryMovement
+from app.routes.inventory_routes import router as inventory_router
 
 
 app = FastAPI(
@@ -63,6 +65,9 @@ app.include_router(dashboard_router)
 app.include_router(sales_router)
 
 app.include_router(notification_router)
+
+app.include_router(inventory_router)
+
 
 
 @app.get("/")

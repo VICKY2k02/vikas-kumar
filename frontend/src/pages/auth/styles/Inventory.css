@@ -1,0 +1,192 @@
+/* ==========================
+   Inventory Page
+========================== */
+
+.inventory-page {
+    padding: 24px;
+    background: #f5f7fb;
+    min-height: 100vh;
+}
+
+
+/* ==========================
+   Header
+========================== */
+
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.inventory-header h4 {
+    font-weight: 700;
+}
+
+
+/* ==========================
+   Dashboard Cards
+========================== */
+
+.inventory-page .MuiCard-root {
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: .3s;
+}
+
+.inventory-page .MuiCard-root:hover {
+    transform: translateY(-4px);
+}
+
+.inventory-page .MuiCardContent-root {
+    text-align: center;
+}
+
+.inventory-page .MuiCardContent-root p {
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.inventory-page .MuiCardContent-root h4 {
+    font-weight: bold;
+    color: #1976d2;
+}
+
+
+/* ==========================
+   Filters
+========================== */
+
+.inventory-filters {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.inventory-filters .MuiTextField-root {
+    min-width: 220px;
+    background: white;
+}
+
+
+/* ==========================
+   Table
+========================== */
+
+.inventory-table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+
+
+/* ==========================
+   Buttons
+========================== */
+
+.inventory-page .MuiButton-contained {
+    text-transform: none;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.inventory-page .MuiButton-outlined {
+    text-transform: none;
+}
+
+
+/* ==========================
+   Status Chips
+========================== */
+
+.status-instock {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-lowstock {
+    background: #fff3e0;
+    color: #ef6c00;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-outstock {
+    background: #ffebee;
+    color: #d32f2f;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* ==========================
+   Charts
+========================== */
+
+.inventory-chart {
+    margin-top: 30px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+
+
+/* ==========================
+   Dialog
+========================== */
+
+.MuiDialog-paper {
+    border-radius: 14px !important;
+}
+
+
+/* ==========================
+   Responsive
+========================== */
+
+@media (max-width:992px){
+
+    .inventory-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .inventory-filters{
+        flex-direction:column;
+    }
+
+    .inventory-filters .MuiTextField-root{
+        width:100%;
+    }
+
+}
+
+@media (max-width:768px){
+
+    .inventory-page{
+        padding:16px;
+    }
+
+}
+
+@media (max-width:600px){
+
+    .inventory-header h4{
+        font-size:26px;
+    }
+
+}

@@ -23,6 +23,7 @@ import Products from "../pages/products/Products";
 
 import Sales from "../pages/sales/Sales";
 
+import Inventory from "../pages/inventory/Inventory";
 
 
 const AppRoutes = () => {
@@ -127,6 +128,10 @@ const AppRoutes = () => {
                     element={<Products />}
                 />
 
+                <Route
+                    path="/inventory"
+                    element={<Inventory />}
+                />
 
             </Route>
 
