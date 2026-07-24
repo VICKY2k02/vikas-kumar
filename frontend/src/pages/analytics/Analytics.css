@@ -1,0 +1,265 @@
+.analytics-page {
+    padding: 25px;
+    background: #f5f7fb;
+    min-height: 100vh;
+}
+
+/* ==========================
+Header
+========================== */
+
+.analytics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.analytics-title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.analytics-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* ==========================
+Filters
+========================== */
+
+.analytics-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.analytics-filters .MuiTextField-root {
+    min-width: 200px;
+}
+
+/* ==========================
+KPI Cards
+========================== */
+
+.kpi-grid {
+    margin-bottom: 30px;
+}
+
+.kpi-card {
+    border-radius: 14px !important;
+    transition: .25s;
+    cursor: pointer;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,.12);
+}
+
+.kpi-card .MuiCardContent-root {
+    padding: 24px;
+}
+
+.kpi-title {
+    font-size: 15px;
+    color: #64748b;
+    margin-bottom: 10px;
+}
+
+.kpi-value {
+    font-size: 30px;
+    font-weight: bold;
+    color: #0f172a;
+}
+
+.kpi-icon {
+    font-size: 42px !important;
+    color: #1976d2;
+    float: right;
+}
+
+/* ==========================
+Chart Section
+========================== */
+
+.chart-grid {
+    margin-top: 20px;
+}
+
+.chart-card {
+    border-radius: 14px !important;
+    margin-bottom: 20px;
+}
+
+.chart-card .MuiCardContent-root {
+    padding: 20px;
+}
+
+.chart-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    color: #1e293b;
+}
+
+/* ==========================
+Tables
+========================== */
+
+.analytics-table-card {
+    margin-top: 25px;
+    border-radius: 14px !important;
+}
+
+.analytics-table-card .MuiTableHead-root {
+    background: #1976d2;
+}
+
+.analytics-table-card .MuiTableHead-root th {
+    color: white;
+    font-weight: 600;
+}
+
+.analytics-table-card .MuiTableRow-root:hover {
+    background: #f4f6fa;
+}
+
+/* ==========================
+Summary Cards
+========================== */
+
+.summary-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summary-icon {
+    font-size: 42px !important;
+    color: #1976d2;
+}
+
+.summary-number {
+    font-size: 28px;
+    font-weight: bold;
+    color: #111827;
+}
+
+.summary-label {
+    color: #6b7280;
+    font-size: 15px;
+}
+
+/* ==========================
+Buttons
+========================== */
+
+.refresh-btn {
+    margin-left: 10px !important;
+}
+
+.export-btn {
+    margin-left: 10px !important;
+}
+
+/* ==========================
+Charts Container
+========================== */
+
+.recharts-wrapper {
+    margin: auto;
+}
+
+/* ==========================
+Responsive
+========================== */
+
+@media (max-width:1200px){
+
+.analytics-filters{
+
+    flex-direction: column;
+
+}
+
+.analytics-filters .MuiTextField-root{
+
+    width:100%;
+
+}
+
+}
+
+@media (max-width:900px){
+
+.analytics-header{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:15px;
+
+}
+
+.analytics-actions{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:flex-start;
+
+    flex-wrap:wrap;
+
+}
+
+.kpi-value{
+
+    font-size:24px;
+
+}
+
+}
+
+@media (max-width:600px){
+
+.analytics-page{
+
+    padding:15px;
+
+}
+
+.analytics-title{
+
+    font-size:24px;
+
+}
+
+.chart-title{
+
+    font-size:16px;
+
+}
+
+.summary-number{
+
+    font-size:22px;
+
+}
+
+.analytics-filters{
+
+    padding:15px;
+
+}
+
+}

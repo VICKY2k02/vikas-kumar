@@ -25,6 +25,7 @@ import Sales from "../pages/sales/Sales";
 
 import Inventory from "../pages/inventory/Inventory";
 
+import AnalyticsDashboard from "../pages/analytics/AnalyticsDashboard";
 
 const AppRoutes = () => {
 
@@ -132,6 +133,11 @@ const AppRoutes = () => {
                     path="/inventory"
                     element={<Inventory />}
                 />
+
+                <Route
+    path="/analytics"
+    element={<AnalyticsDashboard />}
+/>
 
             </Route>
 

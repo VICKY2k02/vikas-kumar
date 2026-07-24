@@ -8,6 +8,7 @@ import {
     PersonAdd
 } from "@mui/icons-material";
 
+
 import { NavLink, useNavigate } from "react-router-dom";
 import "../../pages/auth/styles/sidebar.css";
 import { logoutUser } from "../../api/authApi";
@@ -15,6 +16,7 @@ import { logoutUser } from "../../api/authApi";
 import CategoryIcon from "@mui/icons-material/Category";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
+
 
 interface SidebarProps {
     open: boolean;
@@ -145,6 +147,9 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                             <Inventory2Icon />
                             <span>Inventory</span>
                         </NavLink>
+
+
+ 
 
                     </>
 

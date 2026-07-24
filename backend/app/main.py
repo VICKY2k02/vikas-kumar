@@ -34,6 +34,8 @@ from app.models.inventory import Inventory
 from app.models.inventory_movement import InventoryMovement
 from app.routes.inventory_routes import router as inventory_router
 
+from app.routes.analytics_routes import router as analytics_router
+
 
 app = FastAPI(
     title="RetailPulse Analytics API",
@@ -67,6 +69,8 @@ app.include_router(sales_router)
 app.include_router(notification_router)
 
 app.include_router(inventory_router)
+
+app.include_router(analytics_router)
 
 
 
