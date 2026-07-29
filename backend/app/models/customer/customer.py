@@ -2,7 +2,7 @@ from sqlalchemy import (
     Column,
     Integer,
     String,
-    Float,
+    Date,
     DateTime,
     ForeignKey
 )
@@ -13,9 +13,9 @@ from datetime import datetime
 from app.core.database import Base
 
 
-class Product(Base):
+class Customer(Base):
 
-    __tablename__ = "products"
+    __tablename__ = "customers"
 
     id = Column(
         Integer,
@@ -29,51 +29,45 @@ class Product(Base):
         nullable=False
     )
 
-    category_id = Column(
-        Integer,
-        ForeignKey("categories.id"),
+    customer_id = Column(
+        String,
+        unique=True,
         nullable=False
     )
 
-    name = Column(
+    full_name = Column(
         String,
         nullable=False
     )
 
-    sku = Column(
+    email = Column(
         String,
         nullable=False
     )
 
-    brand = Column(
+    phone = Column(
         String,
         nullable=False
     )
 
-    description = Column(
-        String,
-        nullable=True
-    )
+    gender = Column(String)
 
-    unit_price = Column(
-        Float,
-        nullable=False
-    )
+    date_of_birth = Column(Date)
 
-    cost_price = Column(
-        Float,
-        nullable=False
-    )
+    address = Column(String)
 
-    stock_quantity = Column(
-        Integer,
-        default=0
-    )
+    city = Column(String)
 
-    unit_of_measure = Column(
+    state = Column(String)
+
+    country = Column(String)
+
+    customer_type = Column(
         String,
         nullable=False
     )
+
+    preferred_sales_channel = Column(String)
 
     status = Column(
         String,
@@ -93,18 +87,17 @@ class Product(Base):
 
     company = relationship(
         "Company",
-        back_populates="products"
+        back_populates="customers"
     )
 
-    category = relationship(
-        "Category",
-        back_populates="products"
+    purchase_summary = relationship(
+        "CustomerPurchaseSummary",
+        back_populates="customer",
+        uselist=False,
+        cascade="all, delete"
     )
 
-    items = relationship(
-        "OrderItem",
-        back_populates="product"
+    orders = relationship(
+        "Order",
+        back_populates="customer"
     )
-    # stock_quantity = Column(Integer, default=0)
-
-    # status = Column(String, default="Active")

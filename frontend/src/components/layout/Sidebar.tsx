@@ -16,7 +16,8 @@ import { logoutUser } from "../../api/authApi";
 import CategoryIcon from "@mui/icons-material/Category";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
-
+import PeopleIcon from "@mui/icons-material/People";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 interface SidebarProps {
     open: boolean;
@@ -75,6 +76,7 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
             </NavLink>
 
 
+
             {/* Profile */}
 
             <NavLink
@@ -116,6 +118,25 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                         </NavLink>
 
                         <NavLink
+                            to="/customers"
+                            onClick={closeSidebar}
+                        >
+                            <PeopleIcon />
+                            <span>Customers</span>
+                        </NavLink>
+
+
+                        <NavLink
+                            to="/orders"
+                            onClick={closeSidebar}
+                        >
+                            <ShoppingCartIcon/>
+                            <span>Orders</span>
+                        </NavLink>
+
+                        
+
+                        <NavLink
                             to="/categories"
                             onClick={closeSidebar}
                         >
@@ -149,7 +170,7 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                         </NavLink>
 
 
- 
+
 
                     </>
 

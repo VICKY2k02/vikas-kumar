@@ -32,7 +32,7 @@ const Register = () => {
 
 
         const company = JSON.parse(
-            localStorage.getItem("user") || "{}"
+            localStorage.getItem("user") || "{}"   //if user doesn't exists null
         );
 
         data.company_id = company.company_id;

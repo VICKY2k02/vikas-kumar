@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 
 DATABASE_URL = "sqlite:///./retailpulse.db"
+# DATABASE_URL = "postgresql://postgres:YOUR_PASSWORD@localhost:5432/retailpulse"
 
 engine = create_engine(
     DATABASE_URL,

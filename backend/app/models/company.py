@@ -72,3 +72,13 @@ class Company(Base):
         "Notification",
         back_populates="company"
     )
+
+    customers = relationship(
+        "Customer",
+        back_populates="company"
+    )
+
+
+
+
+

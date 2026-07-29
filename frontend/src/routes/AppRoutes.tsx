@@ -27,6 +27,10 @@ import Inventory from "../pages/inventory/Inventory";
 
 import AnalyticsDashboard from "../pages/analytics/AnalyticsDashboard";
 
+import CustomerDashboard from "../pages/customers/CustomerDashboard";
+
+import OrdersPage from "../pages/orders/OrdersPage";
+
 const AppRoutes = () => {
 
     return (
@@ -117,6 +121,13 @@ const AppRoutes = () => {
                     element={<Sales />}
                 />
 
+<Route
+
+    path="/orders"
+
+    element={<OrdersPage />}
+
+/>
 
 
                 <Route
@@ -135,9 +146,14 @@ const AppRoutes = () => {
                 />
 
                 <Route
-    path="/analytics"
-    element={<AnalyticsDashboard />}
-/>
+                    path="/analytics"
+                    element={<AnalyticsDashboard />}
+                />
+
+                <Route
+                    path="/customers"
+                    element={<CustomerDashboard />}
+                />
 
             </Route>
 
