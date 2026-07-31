@@ -1,6 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.orm import Session
+import os
+
 
 
 
@@ -12,6 +14,9 @@ engine = create_engine(
     DATABASE_URL,
     connect_args={"check_same_thread": False}
 )
+
+print("DB FILE:", os.path.abspath("retailpulse.db"))
+print("ENGINE:", engine.url)
 
 SessionLocal = sessionmaker(
     autocommit=False,

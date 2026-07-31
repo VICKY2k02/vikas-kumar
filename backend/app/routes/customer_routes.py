@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.dependencies import require_roles
 
+
 from app.schemas.customer_schema import (
     CustomerCreate,
     CustomerUpdate,
@@ -90,9 +91,7 @@ def customers(
 
     )
 
-    print(result)
 
-    return result
 
 
 

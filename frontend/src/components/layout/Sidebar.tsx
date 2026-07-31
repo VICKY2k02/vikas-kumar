@@ -18,6 +18,8 @@ import Inventory2Icon from "@mui/icons-material/Inventory2";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PeopleIcon from "@mui/icons-material/People";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+
 
 interface SidebarProps {
     open: boolean;
@@ -130,11 +132,11 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                             to="/orders"
                             onClick={closeSidebar}
                         >
-                            <ShoppingCartIcon/>
+                            <ShoppingCartIcon />
                             <span>Orders</span>
                         </NavLink>
 
-                        
+
 
                         <NavLink
                             to="/categories"
@@ -167,6 +169,14 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                         >
                             <Inventory2Icon />
                             <span>Inventory</span>
+                        </NavLink>
+
+                        <NavLink
+                            to="/forecast"
+                            onClick={closeSidebar}
+                        >
+                            <TrendingUpIcon />
+                            <span>Demand Forecast</span>
                         </NavLink>
 
 

@@ -15,7 +15,7 @@ import CustomerProfileDialog from "./CustomerProfileDialog";
 import CustomerAnalyticsDashboard from "./CustomerAnalyticsDashboard";
 import EditCustomerDialog from "./EditCustomerDialog";
 import CustomerSegmentation from "./CustomerSegmentation";
-
+import CustomerExportDialog from "./CustomerExportDialog";
 
 import {
     getCustomers,
@@ -31,8 +31,8 @@ export default function CustomerDashboard() {
     const [analytics, setAnalytics] =
         useState<any>(null);
 
-    const [segments,setSegments]=
-useState<any[]>([]);
+    const [segments, setSegments] =
+        useState<any[]>([]);
 
     const [customers, setCustomers] =
         useState<any[]>([]);
@@ -69,6 +69,10 @@ useState<any[]>([]);
     const [editOpen, setEditOpen] =
         useState(false);
 
+
+    const [openExport, setOpenExport] =
+        useState(false);
+
     useEffect(() => {
 
         loadCustomers();
@@ -86,24 +90,24 @@ useState<any[]>([]);
         country
     ]);
 
-    const loadSegments = async()=>{
+    const loadSegments = async () => {
 
-    try{
+        try {
 
-        const res=
-        await getCustomerSegments();
+            const res =
+                await getCustomerSegments();
 
-        setSegments(res.data);
+            setSegments(res.data);
 
-    }
+        }
 
-    catch(err){
+        catch (err) {
 
-        console.log(err);
+            console.log(err);
 
-    }
+        }
 
-};
+    };
 
     const loadCustomers = async () => {
 
@@ -113,21 +117,21 @@ useState<any[]>([]);
 
             const data = await getCustomers({
 
-    search,
+                search,
 
-    customer_type: customerType,
+                customer_type: customerType,
 
-    status,
+                status,
 
-    city,
+                city,
 
-    state,
+                state,
 
-    country
+                country
 
-});
+            });
 
-setCustomers(data);
+            setCustomers(data);
 
         }
 
@@ -226,80 +230,76 @@ setCustomers(data);
 
     const handleStatusChange = async (customer: any) => {
 
-    try {
+        try {
 
-        const newStatus =
+            const newStatus =
 
-            customer.status === "Active"
+                customer.status === "Active"
 
-                ? "Inactive"
+                    ? "Inactive"
 
-                : "Active";
+                    : "Active";
 
-        await changeCustomerStatus(
+            await changeCustomerStatus(
 
-            customer.id,
+                customer.id,
 
-            newStatus
+                newStatus
 
-        );
+            );
 
-        await loadCustomers();
+            await loadCustomers();
 
-        await loadAnalytics();
+            await loadAnalytics();
 
-    }
+        }
 
-    catch (err) {
+        catch (err) {
 
-        console.error(err);
+            console.error(err);
 
-        alert("Failed to update status");
+            alert("Failed to update status");
 
-    }
+        }
 
-};
+    };
 
     return (
 
         <Box p={3}>
 
             <Box
-
                 display="flex"
-
                 justifyContent="space-between"
-
                 alignItems="center"
-
                 mb={3}
-
             >
 
                 <Typography
                     variant="h4"
                     fontWeight="bold"
                 >
-
                     Customer Management
-
                 </Typography>
 
-                <Button
+                <Box display="flex" gap={2}>
 
-                    variant="contained"
+                    <Button
+                        variant="outlined"
+                        onClick={() => setOpenExport(true)}
+                    >
+                        Export
+                    </Button>
 
-                    startIcon={<AddIcon />}
+                    <Button
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={() => setOpenAdd(true)}
+                    >
+                        Add Customer
+                    </Button>
 
-                    onClick={() =>
-                        setOpenAdd(true)
-                    }
-
-                >
-
-                    Add Customer
-
-                </Button>
+                </Box>
 
             </Box>
 
@@ -345,8 +345,8 @@ setCustomers(data);
             />
 
             <CustomerSegmentation
-    segments={segments}
-/>
+                segments={segments}
+            />
 
             <AddCustomerDialog
 
@@ -371,6 +371,11 @@ setCustomers(data);
                     setProfileOpen(false);
                     setSelectedCustomer(null);
                 }}
+            />
+
+            <CustomerExportDialog
+                open={openExport}
+                onClose={() => setOpenExport(false)}
             />
 
 

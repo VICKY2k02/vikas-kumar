@@ -182,13 +182,26 @@ def register_user(db, data):
 
 
 def login_user(db, data, request):
-    print("Email Received:", data.email)
+    print("================================")
+    print("Email:", data.email)
 
     user = db.query(User).filter(
         User.email == data.email
     ).first()
 
-    print("User Found:", user)
+    print("User:", user)
+
+    if user:
+        print("DB Password:", user.password)
+        print("Entered Password:", data.password)
+        print(
+            "Verify:",
+            verify_password(
+                data.password,
+                user.password
+            )
+        )
+    print("================================")
 
     if not user:
         raise HTTPException(
@@ -236,14 +249,14 @@ def login_user(db, data, request):
 
     browser = get_browser(user_agent)
 
-    create_audit_log(
-        db=db,
-        company_id=user.company_id,
-        user_id=user.id,
-        action="User Login",
-        ip_address=ip,
-        browser=browser
-    )
+    # create_audit_log(
+    #     db=db,
+    #     company_id=user.company_id,
+    #     user_id=user.id,
+    #     action="User Login",
+    #     ip_address=ip,
+    #     browser=browser
+    # )
 
     # Get Company Details
     company = db.query(Company).filter(

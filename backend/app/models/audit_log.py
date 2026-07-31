@@ -64,3 +64,9 @@ class AuditLog(Base):
     invoice_number = Column(String, nullable=True)
 
     product_name = Column(String, nullable=True)
+
+    module = Column(String)
+
+    description = Column(String)
+
+    performed_by = Column(String)

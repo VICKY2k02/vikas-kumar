@@ -43,6 +43,12 @@ from app.routes.order_routes import router as order_router
 from app.models.order import Order
 from app.models.order_item import OrderItem
 
+from app.routes.customer_export_routes import router as customer_export_router
+
+from app.models.demand_forecast import DemandForecast
+from app.models.forecast_history import ForecastHistory
+from app.routes.forecast_routes import router as forecast_router
+
 
 app = FastAPI(
     title="RetailPulse Analytics API",
@@ -82,6 +88,10 @@ app.include_router(analytics_router)
 app.include_router(customer_router)
 
 app.include_router(order_router)
+
+app.include_router(customer_export_router)
+
+app.include_router(forecast_router)
 
 
 @app.get("/")

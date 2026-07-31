@@ -7,7 +7,13 @@ from sqlalchemy.orm import joinedload
 from app.models.customer.customer import Customer
 from app.models.customer.customer_purchase_summary import CustomerPurchaseSummary
 from app.models.audit_log import AuditLog
+from app.models.notification import Notification
 
+
+from app.models.order import Order
+from app.models.order_item import OrderItem
+from app.models.product import Product
+from app.models.category import Category
 
 from app.schemas.customer_schema import (
     CustomerCreate,
@@ -108,6 +114,16 @@ def create_customer(
 
         )
 
+    )
+
+
+    db.add(
+        Notification(
+            company_id=current_user.company_id,
+            title="New Customer Registered",
+            message=f"{obj.full_name} has been registered.",
+            type="Customer"
+        )
     )
 
     db.commit()
@@ -264,30 +280,242 @@ def get_customers(
 # Get Customer
 # -----------------------------------------
 def get_customer(
-
     db: Session,
-
     customer_id: int,
-
     current_user
-
 ):
 
-    return (
-
+    customer = (
         db.query(Customer)
+        .filter(
+            Customer.id == customer_id,
+            Customer.company_id == current_user.company_id
+        )
+        .first()
+    )
+
+    if not customer:
+        return None
+
+    summary = (
+        db.query(CustomerPurchaseSummary)
+        .filter(
+            CustomerPurchaseSummary.customer_id == customer.id
+        )
+        .first()
+    )
+
+    orders = (
+        db.query(Order)
+        .filter(
+            Order.customer_id == customer.id
+        )
+        .order_by(Order.created_at.desc())
+        .all()
+    )
+
+    recent_transactions = []
+
+    for order in orders:
+
+        recent_transactions.append({
+
+            "id": order.id,
+
+            "date": order.created_at,
+
+            "quantity": order.total_quantity,
+
+            "amount": order.total_amount,
+
+            "payment": order.payment_method
+
+        })
+
+    timeline = [
+
+        {
+            "title": "Customer Created",
+            "date": customer.created_at
+        }
+
+    ]
+
+    for order in orders:
+
+        timeline.append({
+
+            "title": "Order Created",
+
+            "date": order.created_at
+
+        })
+
+    favorite_product = (
+
+        db.query(
+
+            Product.name,
+
+            func.count(OrderItem.id)
+
+        )
+
+        .join(
+
+            OrderItem,
+
+            Product.id == OrderItem.product_id
+
+        )
+
+        .join(
+
+            Order,
+
+            Order.id == OrderItem.order_id
+
+        )
 
         .filter(
 
-            Customer.id == customer_id,
+            Order.customer_id == customer.id
 
-            Customer.company_id == current_user.company_id
+        )
+
+        .group_by(
+
+            Product.name
+
+        )
+
+        .order_by(
+
+            func.count(OrderItem.id).desc()
 
         )
 
         .first()
 
     )
+
+    favorite_category = (
+
+        db.query(
+
+            Category.name,
+
+            func.count(OrderItem.id)
+
+        )
+
+        .join(
+
+            Product,
+
+            Category.id == Product.category_id
+
+        )
+
+        .join(
+
+            OrderItem,
+
+            Product.id == OrderItem.product_id
+
+        )
+
+        .join(
+
+            Order,
+
+            Order.id == OrderItem.order_id
+
+        )
+
+        .filter(
+
+            Order.customer_id == customer.id
+
+        )
+
+        .group_by(
+
+            Category.name
+
+        )
+
+        .order_by(
+
+            func.count(OrderItem.id).desc()
+
+        )
+
+        .first()
+
+    )
+
+    data = customer.__dict__.copy()
+
+    data.pop("_sa_instance_state", None)
+
+    if summary:
+
+        data["total_orders"] = summary.total_orders
+
+        data["total_revenue"] = summary.total_revenue
+
+        data["total_products_purchased"] = summary.total_products_purchased
+
+        data["average_order_value"] = summary.average_order_value
+
+        data["purchase_frequency"] = summary.purchase_frequency
+
+        data["first_purchase_date"] = summary.first_purchase_date
+
+        data["last_purchase_date"] = summary.last_purchase_date
+
+    else:
+
+        data["total_orders"] = 0
+
+        data["total_revenue"] = 0
+
+        data["total_products_purchased"] = 0
+
+        data["average_order_value"] = 0
+
+        data["purchase_frequency"] = 0
+
+        data["first_purchase_date"] = None
+
+        data["last_purchase_date"] = None
+
+    data["favorite_product"] = (
+
+        favorite_product[0]
+
+        if favorite_product
+
+        else "-"
+
+    )
+
+    data["favorite_category"] = (
+
+        favorite_category[0]
+
+        if favorite_category
+
+        else "-"
+
+    )
+
+    data["recent_transactions"] = recent_transactions
+
+    data["timeline"] = timeline
+
+    return data
 
 
 # -----------------------------------------
@@ -340,6 +568,20 @@ def update_customer(
         )
 
     )
+
+    if (
+        data.customer_type
+        and data.customer_type == "VIP"
+    ):
+
+        db.add(
+            Notification(
+                company_id=current_user.company_id,
+                title="Customer Became VIP",
+                message=f"{customer.full_name} reached VIP status.",
+                type="Customer"
+            )
+        )
 
     db.commit()
 

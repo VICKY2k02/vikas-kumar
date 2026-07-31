@@ -104,10 +104,16 @@ def require_roles(*roles):
 
     def role_checker(current_user=Depends(get_current_user)):
 
+        print("========== ROLE CHECK ==========")
+        print("User Email :", current_user.email)
+        print("User Role  :", repr(current_user.role))
+        print("Allowed    :", roles)
+        print("================================")
+
         if current_user.role not in roles:
             raise HTTPException(
                 status_code=403,
-                detail="Permission Denied"
+                detail=f"Permission Denied ({current_user.role})"
             )
 
         return current_user

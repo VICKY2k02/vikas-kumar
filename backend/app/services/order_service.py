@@ -6,7 +6,7 @@ from app.models.customer.customer import Customer
 from app.models.customer.customer_purchase_summary import CustomerPurchaseSummary
 from app.models.audit_log import AuditLog
 from app.schemas.order_schema import OrderCreate, OrderUpdate
-
+from app.models.notification import Notification
 
 # -----------------------------------------
 # Create Order
@@ -278,4 +278,26 @@ def update_customer_purchase_summary(
     summary.last_purchase_date = last_purchase
     summary.updated_at = datetime.utcnow()
 
+    if summary.total_orders == 1:
+
+        customer = (
+            db.query(Customer)
+            .filter(
+                Customer.id == summary.customer_id
+            )
+            .first()
+        )
+
+        if customer:
+
+            db.add(
+                Notification(
+                    company_id=customer.company_id,
+                    title="First Purchase",
+                    message=f"{customer.full_name} completed the first purchase.",
+                    type="Customer"
+                )
+            )
+
     db.commit()
+

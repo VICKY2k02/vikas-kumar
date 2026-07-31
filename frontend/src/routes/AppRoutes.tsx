@@ -31,6 +31,8 @@ import CustomerDashboard from "../pages/customers/CustomerDashboard";
 
 import OrdersPage from "../pages/orders/OrdersPage";
 
+import ForecastDashboard from "../pages/forecast/ForecastDashboard";
+
 const AppRoutes = () => {
 
     return (
@@ -127,6 +129,11 @@ const AppRoutes = () => {
 
     element={<OrdersPage />}
 
+/>
+
+<Route
+    path="/forecast"
+    element={<ForecastDashboard />}
 />
 
 
