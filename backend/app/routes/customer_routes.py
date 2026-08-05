@@ -24,7 +24,7 @@ from app.services.customer.customer_segmentation_service import (
 from app.services.customer.customer_service import (
     create_customer,
     get_customers,
-    get_customer,
+    get_customer_object,
     update_customer,
     delete_customer,
     change_status,
@@ -166,7 +166,7 @@ def customer(
 
 ):
 
-    obj = get_customer(
+    obj = get_customer_object(
         db,
         customer_id,
         current_user
@@ -364,3 +364,6 @@ def delete(
         "message": "Customer deleted successfully"
 
     }
+
+
+

@@ -73,6 +73,82 @@ def register_company(db, data, request):
             detail="Owner email already exists."
         )
 
+    # # Create Company
+    # company = Company(
+    #     name=data.company_name,
+    #     industry=data.industry,
+    #     email=data.company_email,
+    #     address=data.company_address,
+    #     phone=data.company_phone
+    # )
+
+    # db.add(company)
+    # db.commit()
+    # db.refresh(company)
+
+    # print("=" * 50)
+    # print("Password:", repr(data.password))
+    # print("Type:", type(data.password))
+    # print("Length:", len(data.password))
+    # print("=" * 50)
+
+    # # Create First Admin
+    # admin = User(
+    #     company_id=company.id,
+    #     name=data.owner_name,
+    #     email=data.owner_email,
+    #     password=hash_password(data.password),
+    #     role="Company Admin",
+    #     status="Active"
+    # )
+
+    # # db.add(admin)
+    # # db.commit()
+    # # db.refresh(admin)
+
+    # # ip = request.client.host
+
+    # # user_agent = request.headers.get("user-agent", "")
+
+    # # browser = get_browser(user_agent)
+
+
+    # # create_audit_log(
+    # #     db=db,
+    # #     company_id=company.id,
+    # #     user_id=admin.id,
+    # #     action="Company Registered",
+    # #     ip_address=ip,
+    # #     browser=browser
+    # # )
+
+    # db.add(admin)
+
+    # db.flush()
+
+    # db.refresh(admin)
+
+    # create_audit_log(
+    #     db=db,
+    #     company_id=company.id,
+    #     user_id=admin.id,
+    #     action="Company Registered",
+    #     ip_address=request.client.host,
+    #     browser=get_browser(
+    #         request.headers.get("user-agent", "")
+    #     )
+    # )
+
+    # db.commit()
+
+    # db.refresh(admin)
+
+    # return {
+    #     "message": "Company registered successfully.",
+    #     "company_id": company.id,
+    #     "admin_id": admin.id
+    # }
+
     # Create Company
     company = Company(
         name=data.company_name,
@@ -83,16 +159,9 @@ def register_company(db, data, request):
     )
 
     db.add(company)
-    db.commit()
-    db.refresh(company)
+    db.flush()          # company.id vastundi
 
-    print("=" * 50)
-    print("Password:", repr(data.password))
-    print("Type:", type(data.password))
-    print("Length:", len(data.password))
-    print("=" * 50)
-
-    # Create First Admin
+    # Create Admin
     admin = User(
         company_id=company.id,
         name=data.owner_name,
@@ -103,24 +172,23 @@ def register_company(db, data, request):
     )
 
     db.add(admin)
-    db.commit()
-    db.refresh(admin)
+    db.flush()          # admin.id vastundi
 
-    ip = request.client.host
-
-    user_agent = request.headers.get("user-agent", "")
-
-    browser = get_browser(user_agent)
-
-
+    # Create Audit Log
     create_audit_log(
         db=db,
         company_id=company.id,
         user_id=admin.id,
         action="Company Registered",
-        ip_address=ip,
-        browser=browser
+        ip_address=request.client.host,
+        browser=get_browser(request.headers.get("user-agent", ""))
     )
+
+    # One commit only
+    db.commit()
+
+    db.refresh(company)
+    db.refresh(admin)
 
     return {
         "message": "Company registered successfully.",
@@ -238,6 +306,17 @@ def login_user(db, data, request):
     db.add(refresh)
 
     user.last_login = datetime.utcnow()
+
+    create_audit_log(
+        db=db,
+        company_id=user.company_id,
+        user_id=user.id,
+        action="User Login",
+        ip_address=request.client.host,
+        browser=get_browser(
+            request.headers.get("user-agent", "")
+        )
+    )
 
     db.commit()
 

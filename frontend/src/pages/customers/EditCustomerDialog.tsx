@@ -52,6 +52,8 @@ export default function EditCustomerDialog({
 
         country: "",
 
+        postal_code: "",
+
         customer_type: "",
 
         preferred_sales_channel: "",
@@ -84,6 +86,8 @@ export default function EditCustomerDialog({
 
                 country: customer.country || "",
 
+                postal_code: customer.postal_code || "",
+
                 customer_type: customer.customer_type,
 
                 preferred_sales_channel:
@@ -113,26 +117,57 @@ export default function EditCustomerDialog({
 
     };
 
-    const handleSave = async () => {
 
-    try {
 
-        await updateCustomer(
-            customer.id,
-            form
-        );
-
-        onClose();
-
-    } catch (err) {
-
-        console.error(err);
-
-        alert("Failed to update customer");
-
+    const errors: {
+        full_name?: string;
+        email?: string;
+        phone?: string;
+    } = {};
+    if (!form.full_name) {
+        errors.full_name = "Full Name is required";
     }
 
-};
+    if (!form.email) {
+        errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+        errors.email = "Invalid email";
+    }
+
+    if (!form.phone) {
+        errors.phone = "Phone is required";
+    } else if (!/^[0-9]{10}$/.test(form.phone)) {
+        errors.phone = "Invalid phone number";
+    }
+
+    const handleSave = async () => {
+
+        if (
+            errors.full_name ||
+            errors.email ||
+            errors.phone
+        ) {
+            return;
+        }
+
+        try {
+
+            await updateCustomer(
+                customer.id,
+                form
+            );
+
+            onClose();
+
+        } catch (err) {
+
+            console.error(err);
+
+            alert("Failed to update customer");
+
+        }
+
+    };
 
     return (
 
@@ -163,6 +198,8 @@ export default function EditCustomerDialog({
                     name="full_name"
                     value={form.full_name}
                     onChange={handleChange}
+                    error={!!errors.full_name}
+                    helperText={errors.full_name}
                 />
 
                 <TextField
@@ -172,6 +209,8 @@ export default function EditCustomerDialog({
                     name="email"
                     value={form.email}
                     onChange={handleChange}
+                    error={!!errors.email}
+                    helperText={errors.email}
                 />
 
                 <TextField
@@ -181,6 +220,8 @@ export default function EditCustomerDialog({
                     name="phone"
                     value={form.phone}
                     onChange={handleChange}
+                    error={!!errors.phone}
+                    helperText={errors.phone}
                 />
 
                 <TextField
@@ -243,6 +284,15 @@ export default function EditCustomerDialog({
                     label="Country"
                     name="country"
                     value={form.country}
+                    onChange={handleChange}
+                />
+
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    label="Postal Code"
+                    name="postal_code"
+                    value={form.postal_code}
                     onChange={handleChange}
                 />
 

@@ -4,6 +4,8 @@ import { Paper, Typography, Grid } from "@mui/material";
 import { getDashboardSummary } from "../../api/dashboardApi";
 
 import "../auth/styles/dashboard.css";
+import DashboardCharts from "./DashboardCharts";
+import ProfileCard from "./ProfileCard";
 
 export default function DashboardSummary() {
     const [summary, setSummary] = useState<any>({
@@ -52,6 +54,9 @@ export default function DashboardSummary() {
     ];
 
     return (
+        <>
+        <ProfileCard />
+        
         <Grid
             container
             spacing={2}
@@ -78,5 +83,8 @@ export default function DashboardSummary() {
                 </Grid>
             ))}
         </Grid>
+        <DashboardCharts />
+
+        </>
     );
 }

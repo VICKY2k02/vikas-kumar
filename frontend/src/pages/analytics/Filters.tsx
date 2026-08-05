@@ -2,8 +2,12 @@ import {
     Box,
     TextField,
     MenuItem,
-    Button
+    Button,
+    Stack
 } from "@mui/material";
+
+import DownloadIcon from "@mui/icons-material/Download";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
 interface Props {
     startDate: string;
@@ -23,7 +27,11 @@ interface Props {
     setPaymentMethod: (value: string) => void;
     setSalesChannel: (value: string) => void;
 
+
     onRefresh: () => void;
+
+    onExport: (format: "csv" | "pdf") => void;
+
 }
 
 export default function Filters({
@@ -45,7 +53,8 @@ export default function Filters({
     setPaymentMethod,
     setSalesChannel,
 
-    onRefresh
+    onRefresh,
+    onExport
 
 }: Props) {
 
@@ -62,28 +71,28 @@ export default function Filters({
                 label="Start Date"
                 type="date"
                 value={startDate}
-                onChange={(e)=>setStartDate(e.target.value)}
-                InputLabelProps={{shrink:true}}
+                onChange={(e) => setStartDate(e.target.value)}
+                InputLabelProps={{ shrink: true }}
             />
 
             <TextField
                 label="End Date"
                 type="date"
                 value={endDate}
-                onChange={(e)=>setEndDate(e.target.value)}
-                InputLabelProps={{shrink:true}}
+                onChange={(e) => setEndDate(e.target.value)}
+                InputLabelProps={{ shrink: true }}
             />
 
             <TextField
                 select
                 label="Category"
                 value={category}
-                sx={{width:180}}
-                onChange={(e)=>setCategory(e.target.value)}
+                sx={{ width: 180 }}
+                onChange={(e) => setCategory(e.target.value)}
             >
                 <MenuItem value="">All</MenuItem>
 
-                {categories.map((c)=>(
+                {categories.map((c) => (
                     <MenuItem key={c.id} value={c.id}>
                         {c.name}
                     </MenuItem>
@@ -94,12 +103,12 @@ export default function Filters({
                 select
                 label="Brand"
                 value={brand}
-                sx={{width:180}}
-                onChange={(e)=>setBrand(e.target.value)}
+                sx={{ width: 180 }}
+                onChange={(e) => setBrand(e.target.value)}
             >
                 <MenuItem value="">All</MenuItem>
 
-                {brands.map((b)=>(
+                {brands.map((b) => (
                     <MenuItem key={b} value={b}>
                         {b}
                     </MenuItem>
@@ -110,8 +119,8 @@ export default function Filters({
                 select
                 label="Payment"
                 value={paymentMethod}
-                sx={{width:180}}
-                onChange={(e)=>setPaymentMethod(e.target.value)}
+                sx={{ width: 180 }}
+                onChange={(e) => setPaymentMethod(e.target.value)}
             >
                 <MenuItem value="">All</MenuItem>
                 <MenuItem value="Cash">Cash</MenuItem>
@@ -123,20 +132,41 @@ export default function Filters({
                 select
                 label="Channel"
                 value={salesChannel}
-                sx={{width:180}}
-                onChange={(e)=>setSalesChannel(e.target.value)}
+                sx={{ width: 180 }}
+                onChange={(e) => setSalesChannel(e.target.value)}
             >
                 <MenuItem value="">All</MenuItem>
                 <MenuItem value="Store">Store</MenuItem>
                 <MenuItem value="Online">Online</MenuItem>
             </TextField>
 
-            <Button
-                variant="contained"
-                onClick={onRefresh}
-            >
-                Refresh
-            </Button>
+            <Stack direction="row" spacing={2}>
+
+                <Button
+                    variant="contained"
+                    onClick={onRefresh}
+                >
+                    Refresh
+                </Button>
+
+                <Button
+                    variant="outlined"
+                    startIcon={<DownloadIcon />}
+                    onClick={() => onExport("csv")}
+                >
+                    Export CSV
+                </Button>
+
+                <Button
+                    variant="outlined"
+                    color="error"
+                    startIcon={<PictureAsPdfIcon />}
+                    onClick={() => onExport("pdf")}
+                >
+                    Export PDF
+                </Button>
+
+            </Stack>
 
         </Box>
 

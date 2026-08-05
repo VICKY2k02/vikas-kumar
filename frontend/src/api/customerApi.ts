@@ -107,3 +107,5 @@ export const getCustomerAnalytics = () =>
 
 export const getCustomerSegments = () =>
     API.get("/customers/segments");
+
+

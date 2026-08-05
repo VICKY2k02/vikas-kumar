@@ -3,7 +3,7 @@ import {
     Settings,
     Logout,
     History,
-    Person,
+    // Person,
     Analytics,
     PersonAdd
 } from "@mui/icons-material";
@@ -19,7 +19,6 @@ import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PeopleIcon from "@mui/icons-material/People";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-
 
 interface SidebarProps {
     open: boolean;
@@ -79,15 +78,7 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
 
 
 
-            {/* Profile */}
 
-            <NavLink
-                to="/profile"
-                onClick={closeSidebar}
-            >
-                <Person />
-                <span>Profile</span>
-            </NavLink>
 
             {/* Add User */}
 

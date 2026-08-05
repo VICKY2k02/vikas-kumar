@@ -62,6 +62,9 @@ class Customer(Base):
 
     country = Column(String)
 
+    postal_code = Column(String, nullable=True)
+
+
     customer_type = Column(
         String,
         nullable=False

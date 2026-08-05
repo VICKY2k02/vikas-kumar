@@ -162,26 +162,7 @@ export default function CustomerDashboard() {
 
     };
 
-    const handleView = async (customer: any) => {
-
-        try {
-
-            const res = await getCustomer(customer.id);
-
-            setSelectedCustomer(res.data);
-
-            setProfileOpen(true);
-
-        } catch (err) {
-
-            console.error(err);
-
-            alert("Failed to load customer profile");
-
-        }
-
-    };
-
+    
 
 
     const handleEdit = async (customer: any) => {
@@ -334,7 +315,7 @@ export default function CustomerDashboard() {
             <CustomerTable
                 customers={customers}
                 loading={loading}
-                onView={handleView}
+                // onView={handleView}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
                 onStatusChange={handleStatusChange}

@@ -34,3 +34,19 @@ export const getDashboardAnalytics = (params?: any) =>
 export const getProducts = async () => {
     return await API.get("/products");
 };
+
+export const exportAnalytics = (
+    format: string,
+    filters: any
+) =>
+    API.get(
+        `/analytics/export/${format}`,
+        {
+            params: filters,
+            responseType: "blob"
+        }
+    );
+
+
+
+

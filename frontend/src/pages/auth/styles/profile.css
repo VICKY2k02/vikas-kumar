@@ -1,90 +1,47 @@
- .dashboard-container{
-    margin-top:62px;
-    padding:30px;
+.dashboard-container{
+    padding:25px;
     background:#f5f7fb;
-    min-height:100vh;
 }
 
 .dashboard-title{
-    font-size:30px !important;
-    font-weight:bold !important;
-    color:#1976d2;
-    margin-bottom:5px !important;
+    font-size:28px !important;
+    font-weight:700 !important;
+    margin-bottom:6px !important;
 }
 
 .dashboard-subtitle{
-    font-size:16px !important;
     color:#666;
-    margin-bottom:30px !important;
+    margin-bottom:25px !important;
 }
 
 .dashboard-card{
-    padding:20px;
+    padding:16px;
     border-radius:12px !important;
-    text-align:center;
-    transition:.3s;
-    cursor:pointer;
-    background:#fff;
-    box-shadow:0 2px 8px rgba(0,0,0,.08) !important;
-    min-height:140px;
-
+    height:90px;
     display:flex;
     flex-direction:column;
     justify-content:center;
-    align-items:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.08) !important;
+    transition:.3s;
 }
 
 .dashboard-card:hover{
     transform:translateY(-4px);
-    box-shadow:0 8px 20px rgba(0,0,0,.15) !important;
+    box-shadow:0 8px 20px rgba(25,118,210,.15) !important;
 }
 
 .card-title{
-    font-size:15px !important;
+    font-size:13px !important;
     color:#666;
-    margin-bottom:12px !important;
-    font-weight:500 !important;
+    font-weight:600 !important;
 }
 
 .card-value{
-    font-size:24px !important;
-    font-weight:bold !important;
+    font-size:17px !important;
+    font-weight:700 !important;
     color:#1976d2;
-    word-break:break-word;
-}
-
-/* Status Colors */
-
-.status-active{
-    color:#2e7d32 !important;
-}
-
-.status-inactive{
-    color:#d32f2f !important;
-}
-
-.status-pending{
-    color:#f57c00 !important;
-}
-
-/* Mobile */
-
-@media(max-width:900px){
-
-    .dashboard-container{
-        padding:20px;
-    }
-
-    .dashboard-title{
-        font-size:26px !important;
-    }
-
-    .dashboard-card{
-        min-height:120px;
-    }
-
-    .card-value{
-        font-size:20px !important;
-    }
-
+    margin-top:5px !important;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }

@@ -16,7 +16,8 @@ import InventoryChart from "./InventoryChart";
 import type { DashboardResponse } from "./analytics";
 
 import {
-    getDashboardAnalytics
+    getDashboardAnalytics,
+    exportAnalytics
 } from "../../api/analyticsApi";
 import { getCategories } from "../../api/categoryApi";
 import { getProducts } from "../../api/productApi";
@@ -108,25 +109,7 @@ export default function AnalyticsDashboard() {
 
     };
 
-    // const loadBrands = async () => {
-
-    //     const res: any = await getProducts();
-
-    //     const products = res.data as any[];
-
-    //     const uniqueBrands: string[] = [];
-
-    // products.forEach((p) => {
-
-    //     if (p.brand && !uniqueBrands.includes(p.brand)) {
-    //         uniqueBrands.push(p.brand);
-    //     }
-
-    // });
-
-    // setBrands(uniqueBrands);
-
-    // };
+   
     const loadBrands = async () => {
 
         const res = await getProducts();
@@ -140,6 +123,37 @@ export default function AnalyticsDashboard() {
         setBrands(uniqueBrands);
 
     };
+
+
+    const handleExport = async (
+    format: "csv" | "pdf"
+) => {
+
+    const res = await exportAnalytics(
+        format,
+        {
+            start_date: startDate || undefined,
+            end_date: endDate || undefined,
+            category: category || undefined,
+            brand: brand || undefined,
+            payment_method: paymentMethod || undefined,
+            sales_channel: salesChannel || undefined
+        }
+    );
+
+    const url = window.URL.createObjectURL(
+        new Blob([res.data])
+    );
+
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+        `analytics.${format}`;
+
+    link.click();
+};
 
 if (loading) {
     return (
@@ -197,31 +211,11 @@ if (loading) {
                 setSalesChannel={setSalesChannel}
 
                 onRefresh={loadDashboard}
+
+                onExport={handleExport}
             />
 
-            {/* <KPICards
-                summary={dashboard.summary}
-            />
-
-            <RevenueChart
-                data={dashboard.revenue_trend}
-            />
-
-            <SalesTrendChart
-                data={dashboard.sales_trend}
-            />
-
-            <TopProductsChart
-                data={dashboard.top_products}
-            />
-
-            <CategoryChart
-                data={dashboard.category_distribution}
-            />
-
-            <InventoryChart
-                data={dashboard.inventory_status_distribution}
-            />*/}
+           
 
             <KPICards
                 summary={dashboard?.summary}

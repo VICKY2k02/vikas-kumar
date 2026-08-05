@@ -1,16 +1,9 @@
-import {
-    Box,
-    Typography,
-    Paper,
-    Grid
-} from "@mui/material";
-
-import "../pages/auth/styles/profile.css";
-
+import { Box, Typography, Paper, Grid } from "@mui/material";
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
+import "../auth/styles/profile.css";
 
-const Dashboard = () => {
+export default function ProfileCard() {
 
     const { user } = useContext(AuthContext);
 
@@ -26,6 +19,8 @@ const Dashboard = () => {
             </Typography>
 
             <Grid container spacing={2}>
+
+                <Grid container spacing={2}>
 
                 <Grid item xs={12} sm={6} md={4} lg={2}>
                     <Paper className="dashboard-card">
@@ -87,9 +82,8 @@ const Dashboard = () => {
                 </Grid>
 
             </Grid>
+            </Grid>
 
         </Box>
     );
-};
-
-export default Dashboard;
+}

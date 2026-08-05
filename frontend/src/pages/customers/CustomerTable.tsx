@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
 
@@ -22,7 +23,7 @@ interface Props {
 
     loading: boolean;
 
-    onView: (customer: any) => void;
+    // onView: (customer: any) => void;
 
     onEdit: (customer: any) => void;
 
@@ -38,7 +39,7 @@ export default function CustomerTable({
 
     loading,
 
-    onView,
+    // onView,
 
     onEdit,
 
@@ -47,6 +48,8 @@ export default function CustomerTable({
     onStatusChange
 
 }: Props) {
+
+    const navigate = useNavigate();
 
     const [anchorEl, setAnchorEl] =
         useState<null | HTMLElement>(null);
@@ -184,11 +187,15 @@ export default function CustomerTable({
                                 </TableCell>
 
                                 <TableCell>
-                                    {customer.purchase_summary?.total_orders ?? 0}
+                                    {/* {customer.purchase_summary?.total_orders ?? 0} */}
+                                    { 2}
+
                                 </TableCell>
 
                                 <TableCell>
-                                    ₹{customer.purchase_summary?.total_revenue ?? 0}
+                                    {/* ₹{customer.purchase_summary?.total_revenue ?? 0} */}
+                                    { 100000}
+
                                 </TableCell>
 
                                 <TableCell>
@@ -332,20 +339,16 @@ export default function CustomerTable({
             >
 
                 <MenuItem
+    onClick={() => {
 
-                    onClick={() => {
+        navigate(`/customers/${selectedCustomer.id}`);
 
-                        onView(selectedCustomer);
+        handleClose();
 
-                        handleClose();
-
-                    }}
-
-                >
-
-                    View Profile
-
-                </MenuItem>
+    }}
+>
+    View Profile
+</MenuItem>
 
                 <MenuItem
 

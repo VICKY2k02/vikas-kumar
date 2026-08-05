@@ -16,7 +16,7 @@ import AddUser from "../components/layout/AddUser";
 
 import AuditLogs from "../pages/AuditLogs";
 import RoleProtectedRoute from "./RoleProtectedRoute";
-import Profile from "../pages/Profile";
+// import Profile from "../pages/Profile";
 
 import Categories from "../pages/categories/Categories";
 import Products from "../pages/products/Products";
@@ -32,6 +32,10 @@ import CustomerDashboard from "../pages/customers/CustomerDashboard";
 import OrdersPage from "../pages/orders/OrdersPage";
 
 import ForecastDashboard from "../pages/forecast/ForecastDashboard";
+
+import CustomerDetails from "../pages/customers/CustomerDetails";
+
+
 
 const AppRoutes = () => {
 
@@ -112,11 +116,11 @@ const AppRoutes = () => {
                     path="/users/add"
                     element={<AddUser />}
                 />
-
+{/* 
                 <Route
                     path="/profile"
                     element={<Profile />}
-                />
+                /> */}
 
                 <Route
                     path="/sales"
@@ -161,6 +165,12 @@ const AppRoutes = () => {
                     path="/customers"
                     element={<CustomerDashboard />}
                 />
+
+
+                <Route
+    path="/customers/:id"
+    element={<CustomerDetails/>}
+/>
 
             </Route>
 

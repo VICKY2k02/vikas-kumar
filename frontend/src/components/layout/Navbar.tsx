@@ -5,11 +5,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { logoutUser } from "../../api/authApi";
 
 import NotificationBell from "./NotificationBell";
+
 
 interface NavbarProps {
     open: boolean;
@@ -19,6 +20,28 @@ interface NavbarProps {
 const Navbar = ({ open, setOpen }: NavbarProps) => {
 
     const navigate = useNavigate();
+
+    const location = useLocation();
+
+    const pageTitles: Record<string, string> = {
+        "/dashboard": "Dashboard",
+        "/users/add": "Add User",
+        "/customers": "Customers",
+        "/orders": "Orders",
+        "/products": "Products",
+        "/categories": "Categories",
+        "/inventory": "Inventory",
+        "/analytics": "Analytics",
+        "/forecast": "Demand Forecast",
+        "/audit-logs": "Audit Logs",
+        "/notifications": "Notifications",
+        "/settings": "Settings",
+    };
+
+    const currentPage =
+        pageTitles[location.pathname] || "Dashboard";
+
+
 
     const user = JSON.parse(
         localStorage.getItem("user") || "{}"
@@ -62,18 +85,21 @@ const Navbar = ({ open, setOpen }: NavbarProps) => {
                     <MenuIcon />
                 </button>
 
-                <h2>RetailPulse Analytics</h2>
+                <div className="nav-title">
+                    <h2>RetailPulse Analytics</h2>
+                    <span>{currentPage}</span>
+                </div>
 
             </div>
 
-            <div className="nav-center">
+            {/* <div className="nav-center">
 
                 <input
                     type="text"
                     placeholder="Search..."
                 />
 
-            </div>
+            </div> */}
 
 
             <div className="nav-right">

@@ -53,9 +53,16 @@ def create_customer(
     )
 
     if existing:
-        raise Exception(
-            "Customer already exists."
+        raise HTTPException(
+
+        status_code=409,
+
+        detail="Email already exists"
+
         )
+
+    print(customer.model_dump())
+
 
     obj = Customer(
 
@@ -81,12 +88,16 @@ def create_customer(
 
         country=customer.country,
 
+        postal_code=customer.postal_code,
+
         customer_type=customer.customer_type,
 
         preferred_sales_channel=customer.preferred_sales_channel,
 
         status="Active"
     )
+
+    print("OBJ POSTAL =", obj.postal_code)
 
     db.add(obj)
 
@@ -279,7 +290,7 @@ def get_customers(
 # -----------------------------------------
 # Get Customer
 # -----------------------------------------
-def get_customer(
+def get_customer_object(
     db: Session,
     customer_id: int,
     current_user
@@ -287,6 +298,9 @@ def get_customer(
 
     customer = (
         db.query(Customer)
+        .options(
+            joinedload(Customer.purchase_summary)
+        )
         .filter(
             Customer.id == customer_id,
             Customer.company_id == current_user.company_id
@@ -304,6 +318,14 @@ def get_customer(
         )
         .first()
     )
+    summary = customer.purchase_summary
+
+    print("SUMMARY OBJECT =", summary)
+
+    if summary:
+        print("SUMMARY CUSTOMER =", summary.customer_id)
+        print("SUMMARY ORDERS =", summary.total_orders)
+        print("SUMMARY REVENUE =", summary.total_revenue)
 
     orders = (
         db.query(Order)
@@ -519,6 +541,37 @@ def get_customer(
 
 
 # -----------------------------------------
+# Get Customer ORM Object
+# -----------------------------------------
+# def get_customer_object(
+#     db: Session,
+#     customer_id: int,
+#     current_user
+# ):
+#     return (
+#         db.query(Customer)
+#         .filter(
+#             Customer.id == customer_id,
+#             Customer.company_id == current_user.company_id
+#         )
+#         .first()
+#     )
+
+def get_customer_by_id(
+    db: Session,
+    customer_id: int,
+    current_user
+):
+    return (
+        db.query(Customer)
+        .filter(
+            Customer.id == customer_id,
+            Customer.company_id == current_user.company_id
+        )
+        .first()
+    )
+
+# -----------------------------------------
 # Update Customer
 # -----------------------------------------
 def update_customer(
@@ -533,26 +586,34 @@ def update_customer(
 
 ):
 
-    customer = get_customer(
-
+    customer = get_customer_by_id(
         db,
-
         customer_id,
-
         current_user
-
     )
 
     if not customer:
 
         return None
 
-    for key, value in data.model_dump(
+    # for key, value in data.model_dump(
 
-        exclude_unset=True
+    #     exclude_unset=True
 
-    ).items():
+    # ).items():
+    existing = db.query(Customer).filter(
+        Customer.company_id == current_user.company_id,
+        Customer.id != customer.id,
+        or_(
+            Customer.email == data.email,
+            Customer.phone == data.phone
+        )
+    ).first()
 
+    if existing:
+        raise Exception("Email or Phone already exists.")
+
+    for key, value in data.model_dump(exclude_unset=True).items():
         setattr(customer, key, value)
 
     db.add(
@@ -603,21 +664,29 @@ def delete_customer(
 
 ):
 
-    customer = get_customer(
-
+    customer = get_customer_by_id(
         db,
-
         customer_id,
-
         current_user
-
     )
 
     if not customer:
 
         return False
 
-    db.delete(customer)
+    customer.status = "Inactive"
+
+    db.add(
+        AuditLog(
+            company_id=current_user.company_id,
+            user_id=current_user.id,
+            action="Customer Deleted"
+        )
+    )
+
+    db.commit()
+
+    return True
 
     db.add(
 
@@ -653,14 +722,10 @@ def change_status(
 
 ):
 
-    customer = get_customer(
-
+    customer = get_customer_by_id(
         db,
-
         customer_id,
-
         current_user
-
     )
 
     if not customer:
@@ -695,6 +760,14 @@ def get_customer_analytics(
     db: Session,
     current_user
 ):
+
+    from sqlalchemy import text
+
+    print("DATABASE:", db.execute(text("PRAGMA database_list")).fetchall())
+
+    print("TABLE INFO:")
+    for row in db.execute(text("PRAGMA table_info(customers)")).fetchall():
+        print(row)
 
     customers = (
         db.query(Customer)
@@ -734,24 +807,24 @@ def get_customer_analytics(
     )
 
 
-    total_revenue = (
-        db.query(
-            func.sum(
-                CustomerPurchaseSummary.total_revenue
-            )
-        )
-        .join(
-            Customer,
-            Customer.id ==
-            CustomerPurchaseSummary.customer_id
-        )
-        .filter(
-            Customer.company_id ==
-            current_user.company_id
-        )
-        .scalar()
-        or 0
-    )
+    # total_revenue = (
+    #     db.query(
+    #         func.sum(
+    #             CustomerPurchaseSummary.total_revenue
+    #         )
+    #     )
+    #     .join(
+    #         Customer,
+    #         Customer.id ==
+    #         CustomerPurchaseSummary.customer_id
+    #     )
+    #     .filter(
+    #         Customer.company_id ==
+    #         current_user.company_id
+    #     )
+    #     .scalar()
+    #     or 0
+    # )
 
     average_customer_spend = (
         total_revenue / total
@@ -1090,3 +1163,29 @@ def get_customer_analytics(
         ],
 
     }
+
+
+# def update_customer_purchase_summary(db: Session, customer_id: int):
+
+#     print("===================================")
+#     print("SUMMARY FUNCTION CALLED")
+#     print("CUSTOMER =", customer_id)
+
+#     orders = (
+#         db.query(Order)
+#         .filter(
+#             Order.customer_id == customer_id,
+#             # Order.status == "Completed"
+#         )
+#         .all()
+#     )
+
+#     print("ORDERS =", len(orders))
+
+#     for o in orders:
+#         print(
+#             o.id,
+#             o.customer_id,
+#             o.status,
+#             o.total_amount
+#         )

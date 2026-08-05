@@ -95,8 +95,8 @@ class User(Base):
         cascade="all, delete"
     )
 
-    role = Column(
-        String,
-        nullable=False,
-        default="Viewer"
-    )
+    # role = Column(
+    #     String,
+    #     nullable=False,
+    #     default="Viewer"
+    # )

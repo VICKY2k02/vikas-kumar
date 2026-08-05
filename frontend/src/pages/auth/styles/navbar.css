@@ -137,3 +137,25 @@
     background:#dc2626;
 
 }
+
+
+
+
+.nav-title{
+    display:flex;
+    flex-direction:column;
+    margin-left:12px;
+}
+
+.nav-title h2{
+    margin:0;
+    font-size:22px;
+    font-weight:700;
+    color:#ffffff;
+}
+
+.nav-title span{
+    font-size:13px;
+    color:#64748b;
+    margin-top:2px;
+}

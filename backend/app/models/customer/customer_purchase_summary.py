@@ -71,3 +71,5 @@ class CustomerPurchaseSummary(Base):
         "Customer",
         back_populates="purchase_summary"
     )
+
+    

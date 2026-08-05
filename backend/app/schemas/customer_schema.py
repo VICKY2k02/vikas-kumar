@@ -16,6 +16,8 @@ class CustomerCreate(BaseModel):
     state: Optional[str] = None
     country: Optional[str] = None
 
+    postal_code: Optional[str] = None
+
     customer_type: str
     preferred_sales_channel: Optional[str] = None
 
@@ -32,6 +34,8 @@ class CustomerUpdate(BaseModel):
     city: Optional[str] = None
     state: Optional[str] = None
     country: Optional[str] = None
+
+    postal_code: Optional[str] = None
 
     customer_type: Optional[str] = None
     preferred_sales_channel: Optional[str] = None
@@ -55,6 +59,9 @@ class CustomerResponse(BaseModel):
     city: Optional[str]
     state: Optional[str]
     country: Optional[str]
+
+    postal_code: Optional[str]
+
 
     customer_type: str
     preferred_sales_channel: Optional[str]
@@ -87,8 +94,7 @@ class CustomerPurchaseSummaryResponse(BaseModel):
     first_purchase_date: datetime | None = None
     last_purchase_date: datetime | None = None
     total_products_purchased: int | None = 0
-    first_purchase_date: datetime | None = None
-    
+    # first_purchase_date: datetime | None = None
     
     class Config:
         from_attributes = True

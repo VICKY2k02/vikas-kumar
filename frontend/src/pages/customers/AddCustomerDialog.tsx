@@ -50,6 +50,8 @@ export default function AddCustomerDialog({
 
         country: "",
 
+        postal_code: "",
+
         customer_type: "Retail",
 
         preferred_sales_channel: "Store",
@@ -74,7 +76,36 @@ export default function AddCustomerDialog({
 
     };
 
+    const errors: {
+        full_name?: string;
+        email?: string;
+        phone?: string;
+    } = {};
+    if (!form.full_name) {
+        errors.full_name = "Full Name is required";
+    }
+
+    if (!form.email) {
+        errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+        errors.email = "Invalid email";
+    }
+
+    if (!form.phone) {
+        errors.phone = "Phone is required";
+    } else if (!/^[0-9]{10}$/.test(form.phone)) {
+        errors.phone = "Invalid phone number";
+    }
+
     const handleSave = async () => {
+
+        if (
+            errors.full_name ||
+            errors.email ||
+            errors.phone
+        ) {
+            return;
+        }
 
         await createCustomer(form);
 
@@ -97,6 +128,8 @@ export default function AddCustomerDialog({
             state: "",
 
             country: "",
+
+            postal_code: "",
 
             customer_type: "Retail",
 
@@ -149,35 +182,25 @@ export default function AddCustomerDialog({
                 />
 
                 <TextField
-
                     fullWidth
-
                     margin="normal"
-
                     label="Email"
-
                     name="email"
-
                     value={form.email}
-
                     onChange={handleChange}
-
+                    error={!!errors.email}
+                    helperText={errors.email}
                 />
 
                 <TextField
-
                     fullWidth
-
                     margin="normal"
-
                     label="Phone"
-
                     name="phone"
-
                     value={form.phone}
-
                     onChange={handleChange}
-
+                    error={!!errors.phone}
+                    helperText={errors.phone}
                 />
 
                 <TextField
@@ -310,6 +333,17 @@ export default function AddCustomerDialog({
 
                 />
 
+
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    label="Postal Code"
+                    name="postal_code"
+                    value={form.postal_code}
+                    onChange={handleChange}
+                />
+
+
                 <TextField
 
                     select
@@ -328,23 +362,10 @@ export default function AddCustomerDialog({
 
                 >
 
-                    <MenuItem value="Retail">
-
-                        Retail
-
-                    </MenuItem>
-
-                    <MenuItem value="Wholesale">
-
-                        Wholesale
-
-                    </MenuItem>
-
-                    <MenuItem value="Corporate">
-
-                        Corporate
-
-                    </MenuItem>
+                    <MenuItem value="New">New</MenuItem>
+<MenuItem value="Regular">Regular</MenuItem>
+<MenuItem value="Loyal">Loyal</MenuItem>
+<MenuItem value="VIP">VIP</MenuItem>
 
                 </TextField>
 
