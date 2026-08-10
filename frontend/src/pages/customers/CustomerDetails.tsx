@@ -150,8 +150,7 @@ export default function CustomerDetails() {
                         <Divider sx={{my:2}}/>
 
                         <Typography variant="h4">
-                            {/* {customer.total_orders ?? 0} */}
-                            {2}
+                            {customer.total_orders ?? 0}
 
                         </Typography>
 
@@ -172,9 +171,8 @@ export default function CustomerDetails() {
                         <Divider sx={{my:2}}/>
 
                         <Typography variant="h4">
-                           {/* ₹ {customer.purchase_summary?.total_revenue ?? 0} */}
+                           ₹ {customer.purchase_summary?.total_revenue ?? 0}
                            {/* ₹ {customer.total_revenue} */}
-                           ₹ {100000}
 
 
 

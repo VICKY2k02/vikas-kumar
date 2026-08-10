@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
     Dialog,
     DialogTitle,
@@ -5,122 +7,256 @@ import {
     DialogActions,
     Button,
     TextField,
-    MenuItem
+    MenuItem,
+    Typography,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    IconButton,
+    Divider,
+    Box,
+    Alert
 } from "@mui/material";
 
-import { useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
 
 import { createSale } from "../../api/salesApi";
 
 interface Props {
-
     open: boolean;
-
     onClose: () => void;
-
+    customers: any[];
     products: any[];
-
 }
 
+interface CartLine {
+    product_id: number;
+    product_name: string;
+    sku: string;
+    category: string;
+    available_stock: number;
+    quantity: number;
+    unit_price: number;
+    discount: number;
+    tax: number;
+}
+
+const emptyLine = {
+    product_id: "",
+    quantity: 1,
+    unit_price: 0,
+    sku: "",
+    category: "",
+    available_stock: 0,
+    discount: 0,
+    tax: 0
+};
+
 export default function AddSaleDialog({
-
     open,
-
     onClose,
-
+    customers,
     products
-
 }: Props) {
 
-    const [form, setForm] = useState({
+    const [customerId, setCustomerId] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState("Cash");
+    const [salesChannel, setSalesChannel] = useState("Retail Store");
+    const [notes, setNotes] = useState("");
 
-        customer_name: "",
+    const [line, setLine] = useState<any>(emptyLine);
+    const [lineError, setLineError] = useState("");
 
-        product_id: "",
+    const [cart, setCart] = useState<CartLine[]>([]);
 
-        quantity: 1,
+    const [formError, setFormError] = useState("");
+    const [saving, setSaving] = useState(false);
 
-        unit_price: 0,
+    const resetForm = () => {
+        setCustomerId("");
+        setPaymentMethod("Cash");
+        setSalesChannel("Retail Store");
+        setNotes("");
+        setLine(emptyLine);
+        setLineError("");
+        setCart([]);
+        setFormError("");
+    };
 
-        discount: 0,
+    const handleClose = () => {
+        resetForm();
+        onClose();
+    };
 
-        tax: 0,
-
-        sales_channel: "Retail Store",
-
-        payment_method: "Cash"
-
-    });
-
-    const change = (e: any) => {
+ 
+    const handleLineChange = (e: any) => {
 
         const { name, value } = e.target;
 
         if (name === "product_id") {
 
-            const product = products.find(
-                (p) => p.id === Number(value)
+            const product = (products || []).find(
+                (p: any) => p.id === Number(value)
             );
 
-            setForm({
-
-                ...form,
-
+            setLine({
+                ...line,
                 product_id: value,
-
-                unit_price: product?.unit_price || 0
-
+                unit_price: Number(product?.unit_price || 0),
+                sku: product?.sku || "",
+                category: product?.category_name || product?.category || "",
+                available_stock: Number(product?.stock_quantity || 0),
+                quantity: 1
             });
 
+            setLineError("");
             return;
-
         }
 
-        setForm({
-
-            ...form,
-
-            [name]: value
-
-        });
-
+        setLine({ ...line, [name]: value });
+        setLineError("");
     };
 
-    const save = async () => {
+ 
+    const validateQuantity = (qty: number, stock: number) => {
+
+        if (!qty || qty <= 0) {
+            return "Quantity must be greater than zero";
+        }
+
+        if (qty > stock) {
+            return `Only ${stock} in stock`;
+        }
+
+        return "";
+    };
+
+    const addLineToCart = () => {
+
+        if (!line.product_id) {
+            setLineError("Select a product first");
+            return;
+        }
+
+        const qty = Number(line.quantity);
+
+        const qtyError = validateQuantity(qty, line.available_stock);
+
+        if (qtyError) {
+            setLineError(qtyError);
+            return;
+        }
+
+        if (Number(line.discount) < 0 || Number(line.tax) < 0) {
+            setLineError("Discount / Tax cannot be negative");
+            return;
+        }
+
+        const subtotal = qty * Number(line.unit_price);
+
+        if (Number(line.discount) > subtotal) {
+            setLineError("Discount exceeds line amount");
+            return;
+        }
+
+        const product = (products || []).find(
+            (p: any) => p.id === Number(line.product_id)
+        );
+
+        setCart([
+            ...cart,
+            {
+                product_id: Number(line.product_id),
+                product_name: product?.name || "",
+                sku: line.sku,
+                category: line.category,
+                available_stock: line.available_stock,
+                quantity: qty,
+                unit_price: Number(line.unit_price),
+                discount: Number(line.discount),
+                tax: Number(line.tax)
+            }
+        ]);
+
+        setLine(emptyLine);
+        setLineError("");
+    };
+
+    const removeLine = (index: number) => {
+        setCart(cart.filter((_, i) => i !== index));
+    };
+
+    // -------------------------------------------------
+    // Billing Summary - recalculated any time cart changes
+    // -------------------------------------------------
+    const subtotal = cart.reduce(
+        (sum, c) => sum + c.quantity * c.unit_price,
+        0
+    );
+
+    const discountTotal = cart.reduce(
+        (sum, c) => sum + c.discount,
+        0
+    );
+
+    const taxTotal = cart.reduce(
+        (sum, c) => sum + c.tax,
+        0
+    );
+
+    const grandTotal = subtotal - discountTotal + taxTotal;
+
+    // -------------------------------------------------
+    // Save
+    // -------------------------------------------------
+    const handleSave = async () => {
+
+        setFormError("");
+
+        if (!customerId) {
+            setFormError("Please select a customer");
+            return;
+        }
+
+        if (cart.length === 0) {
+            setFormError("Add at least one product");
+            return;
+        }
+
+        setSaving(true);
 
         try {
 
             await createSale({
-
-                ...form,
-
-                product_id: Number(form.product_id),
-
-                quantity: Number(form.quantity),
-
-                unit_price: Number(form.unit_price),
-
-                discount: Number(form.discount),
-
-                tax: Number(form.tax)
-
+                customer_id: Number(customerId),
+                payment_method: paymentMethod,
+                sales_channel: salesChannel,
+                notes,
+                items: cart.map((c) => ({
+                    product_id: c.product_id,
+                    quantity: c.quantity,
+                    unit_price: c.unit_price,
+                    discount: c.discount,
+                    tax: c.tax
+                }))
             });
 
-            alert("Sale Created Successfully");
-
+            resetForm();
             onClose();
 
-        }
+        } catch (err: any) {
 
-        catch (err: any) {
-
-            alert(
-
+            setFormError(
                 err.response?.data?.detail ||
-
-                "Unable to Create Sale"
-
+                "Unable to create sale"
             );
+
+        } finally {
+
+            setSaving(false);
 
         }
 
@@ -130,167 +266,293 @@ export default function AddSaleDialog({
 
         <Dialog
             open={open}
-            onClose={onClose}
+            onClose={handleClose}
             fullWidth
             maxWidth="md"
         >
 
             <DialogTitle>
-
                 Create Sale
-
             </DialogTitle>
 
             <DialogContent>
 
+                {formError && (
+                    <Alert severity="error" sx={{ mb: 2 }}>
+                        {formError}
+                    </Alert>
+                )}
+
+                {/* CUSTOMER */}
                 <TextField
+                    select
                     fullWidth
                     margin="normal"
-                    label="Customer Name"
-                    name="customer_name"
-                    value={form.customer_name}
-                    onChange={change}
-                />
+                    label="Customer"
+                    value={customerId}
+                    onChange={(e) => setCustomerId(e.target.value)}
+                >
+                    {(customers || []).map((customer: any) => (
+                        <MenuItem key={customer.id} value={customer.id}>
+                            {customer.full_name}
+                        </MenuItem>
+                    ))}
+                </TextField>
 
+                <Divider sx={{ my: 2 }} />
+
+                <Typography fontWeight="bold" mb={1}>
+                    Add Product
+                </Typography>
+
+                {lineError && (
+                    <Alert severity="warning" sx={{ mb: 2 }}>
+                        {lineError}
+                    </Alert>
+                )}
+
+                {/* PRODUCT */}
                 <TextField
                     select
                     fullWidth
                     margin="normal"
                     label="Product"
                     name="product_id"
-                    value={form.product_id}
-                    onChange={change}
+                    value={line.product_id}
+                    onChange={handleLineChange}
                 >
-
-                    {
-
-                        products
-                            .filter(
-                                (p) => p.status !== "Out of Stock"
-                            )
-                            .map((p) => (
-
-                                <MenuItem
-                                    key={p.id}
-                                    value={p.id}
-                                >
-
-                                    {p.name}
-
-                                </MenuItem>
-
-                            ))
-
-                    }
-
+                    {(products || [])
+                        .filter((p: any) => p.status !== "Out of Stock")
+                        .map((p: any) => (
+                            <MenuItem key={p.id} value={p.id}>
+                                {p.name}
+                            </MenuItem>
+                        ))}
                 </TextField>
 
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    label="Unit Price"
-                    name="unit_price"
-                    value={form.unit_price}
-                    disabled
-                />
+                <Box display="flex" gap={2} flexWrap="wrap">
 
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    type="number"
-                    label="Quantity"
-                    name="quantity"
-                    value={form.quantity}
-                    onChange={change}
-                />
+                    <TextField
+                        margin="normal"
+                        label="SKU"
+                        value={line.sku}
+                        disabled
+                        sx={{ flex: 1, minWidth: 120 }}
+                    />
 
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    type="number"
-                    label="Discount"
-                    name="discount"
-                    value={form.discount}
-                    onChange={change}
-                />
+                    <TextField
+                        margin="normal"
+                        label="Category"
+                        value={line.category}
+                        disabled
+                        sx={{ flex: 1, minWidth: 120 }}
+                    />
 
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    type="number"
-                    label="Tax"
-                    name="tax"
-                    value={form.tax}
-                    onChange={change}
-                />
+                    <TextField
+                        margin="normal"
+                        label="Available Stock"
+                        value={line.available_stock}
+                        disabled
+                        sx={{ flex: 1, minWidth: 120 }}
+                    />
 
+                    <TextField
+                        margin="normal"
+                        label="Unit Price"
+                        value={line.unit_price}
+                        disabled
+                        sx={{ flex: 1, minWidth: 120 }}
+                    />
+
+                </Box>
+
+                <Box display="flex" gap={2} flexWrap="wrap">
+
+                    <TextField
+                        margin="normal"
+                        type="number"
+                        label="Quantity"
+                        name="quantity"
+                        value={line.quantity}
+                        onChange={handleLineChange}
+                        sx={{ flex: 1, minWidth: 120 }}
+                        error={!!lineError}
+                    />
+
+                    <TextField
+                        margin="normal"
+                        type="number"
+                        label="Discount"
+                        name="discount"
+                        value={line.discount}
+                        onChange={handleLineChange}
+                        sx={{ flex: 1, minWidth: 120 }}
+                    />
+
+                    <TextField
+                        margin="normal"
+                        type="number"
+                        label="Tax"
+                        name="tax"
+                        value={line.tax}
+                        onChange={handleLineChange}
+                        sx={{ flex: 1, minWidth: 120 }}
+                    />
+
+                    <Button
+                        variant="outlined"
+                        startIcon={<AddIcon />}
+                        onClick={addLineToCart}
+                        sx={{ mt: 2, height: 56 }}
+                    >
+                        Add
+                    </Button>
+
+                </Box>
+
+                <Divider sx={{ my: 2 }} />
+
+                {/* CART TABLE */}
+                <Typography fontWeight="bold" mb={1}>
+                    Items ({cart.length})
+                </Typography>
+
+                <Table size="small">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Product</TableCell>
+                            <TableCell>Qty</TableCell>
+                            <TableCell>Unit Price</TableCell>
+                            <TableCell>Discount</TableCell>
+                            <TableCell>Tax</TableCell>
+                            <TableCell>Line Total</TableCell>
+                            <TableCell align="center">Remove</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {cart.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={7} align="center">
+                                    No products added yet
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            cart.map((c, i) => (
+                                <TableRow key={i}>
+                                    <TableCell>{c.product_name}</TableCell>
+                                    <TableCell>{c.quantity}</TableCell>
+                                    <TableCell>₹{c.unit_price}</TableCell>
+                                    <TableCell>₹{c.discount}</TableCell>
+                                    <TableCell>₹{c.tax}</TableCell>
+                                    <TableCell>
+                                        ₹{(
+                                            c.quantity * c.unit_price -
+                                            c.discount +
+                                            c.tax
+                                        ).toFixed(2)}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <IconButton
+                                            size="small"
+                                            color="error"
+                                            onClick={() => removeLine(i)}
+                                        >
+                                            <DeleteIcon fontSize="small" />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
+
+                <Divider sx={{ my: 2 }} />
+
+                {/* BILLING SUMMARY */}
+                <Box sx={{ maxWidth: 300, ml: "auto" }}>
+
+                    <Box display="flex" justifyContent="space-between">
+                        <Typography>Subtotal</Typography>
+                        <Typography>₹{subtotal.toFixed(2)}</Typography>
+                    </Box>
+
+                    <Box display="flex" justifyContent="space-between">
+                        <Typography>Discount</Typography>
+                        <Typography>- ₹{discountTotal.toFixed(2)}</Typography>
+                    </Box>
+
+                    <Box display="flex" justifyContent="space-between">
+                        <Typography>Tax</Typography>
+                        <Typography>+ ₹{taxTotal.toFixed(2)}</Typography>
+                    </Box>
+
+                    <Divider sx={{ my: 1 }} />
+
+                    <Box display="flex" justifyContent="space-between">
+                        <Typography fontWeight="bold">Grand Total</Typography>
+                        <Typography fontWeight="bold" color="primary">
+                            ₹{grandTotal.toFixed(2)}
+                        </Typography>
+                    </Box>
+
+                </Box>
+
+                <Divider sx={{ my: 2 }} />
+
+                {/* SALES CHANNEL */}
                 <TextField
                     select
                     fullWidth
                     margin="normal"
                     label="Sales Channel"
-                    name="sales_channel"
-                    value={form.sales_channel}
-                    onChange={change}
+                    value={salesChannel}
+                    onChange={(e) => setSalesChannel(e.target.value)}
                 >
-
-                    <MenuItem value="Retail Store">
-                        Retail Store
-                    </MenuItem>
-
-                    <MenuItem value="Online Store">
-                        Online Store
-                    </MenuItem>
-
-                    <MenuItem value="Marketplace">
-                        Marketplace
-                    </MenuItem>
-
+                    <MenuItem value="Retail Store">Retail Store</MenuItem>
+                    <MenuItem value="Online Store">Online Store</MenuItem>
+                    <MenuItem value="Marketplace">Marketplace</MenuItem>
                 </TextField>
 
+                {/* PAYMENT METHOD */}
                 <TextField
                     select
                     fullWidth
                     margin="normal"
                     label="Payment Method"
-                    name="payment_method"
-                    value={form.payment_method}
-                    onChange={change}
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
                 >
-
-                    <MenuItem value="Cash">
-                        Cash
-                    </MenuItem>
-
-                    <MenuItem value="Card">
-                        Card
-                    </MenuItem>
-
-                    <MenuItem value="UPI">
-                        UPI
-                    </MenuItem>
-
-                    <MenuItem value="Bank Transfer">
-                        Bank Transfer
-                    </MenuItem>
-
+                    <MenuItem value="Cash">Cash</MenuItem>
+                    <MenuItem value="Card">Card</MenuItem>
+                    <MenuItem value="UPI">UPI</MenuItem>
+                    <MenuItem value="Bank Transfer">Bank Transfer</MenuItem>
                 </TextField>
+
+                {/* NOTES */}
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    multiline
+                    rows={2}
+                    label="Notes"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                />
 
             </DialogContent>
 
             <DialogActions>
 
-                <Button
-                    onClick={onClose}
-                >
+                <Button onClick={handleClose} disabled={saving}>
                     Cancel
                 </Button>
 
                 <Button
                     variant="contained"
-                    onClick={save}
+                    onClick={handleSave}
+                    disabled={saving}
                 >
-                    Save
+                    {saving ? "Saving..." : "Save Sale"}
                 </Button>
 
             </DialogActions>

@@ -29,9 +29,9 @@ class SaleItem(Base):
 
     unit_price = Column(Float)
 
-    discount = Column(Float)
+    discount = Column(Float, default=0)
 
-    tax = Column(Float)
+    tax = Column(Float, default=0)
 
     total = Column(Float)
 
@@ -39,3 +39,7 @@ class SaleItem(Base):
         "Sale",
         back_populates="items"
     )
+ 
+    product = relationship("Product")
+
+    category = relationship("Category")

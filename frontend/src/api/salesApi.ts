@@ -1,13 +1,14 @@
 import api from "./axios";
 
+
 export const getSales = (params?: any) =>
-  api.get("/sales", { params });
+  api.get("/sales/", { params });
 
 export const getSale = (id: number) =>
   api.get(`/sales/${id}`);
 
 export const createSale = (data: any) =>
-  api.post("/sales", data);
+  api.post("/sales/", data);
 
 export const updateSale = (
   id: number,
@@ -20,3 +21,18 @@ export const deleteSale = (id: number) =>
 
 export const dashboardSummary = () =>
   api.get("/sales/dashboard/summary");
+
+// -------------------------------------
+// Invoice Export (PDF / CSV)
+// -------------------------------------
+export const exportInvoicePDF = (id: number) =>
+  api.get(`/sales/${id}/export`, {
+    params: { format: "pdf" },
+    responseType: "blob"
+  });
+
+export const exportInvoiceCSV = (id: number) =>
+  api.get(`/sales/${id}/export`, {
+    params: { format: "csv" },
+    responseType: "blob"
+  });

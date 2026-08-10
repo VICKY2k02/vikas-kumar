@@ -61,7 +61,6 @@ def create_customer(
 
         )
 
-    print(customer.model_dump())
 
 
     obj = Customer(
@@ -97,7 +96,6 @@ def create_customer(
         status="Active"
     )
 
-    print("OBJ POSTAL =", obj.postal_code)
 
     db.add(obj)
 
@@ -320,12 +318,7 @@ def get_customer_object(
     )
     summary = customer.purchase_summary
 
-    print("SUMMARY OBJECT =", summary)
-
-    if summary:
-        print("SUMMARY CUSTOMER =", summary.customer_id)
-        print("SUMMARY ORDERS =", summary.total_orders)
-        print("SUMMARY REVENUE =", summary.total_revenue)
+  
 
     orders = (
         db.query(Order)
@@ -763,11 +756,7 @@ def get_customer_analytics(
 
     from sqlalchemy import text
 
-    print("DATABASE:", db.execute(text("PRAGMA database_list")).fetchall())
-
-    print("TABLE INFO:")
-    for row in db.execute(text("PRAGMA table_info(customers)")).fetchall():
-        print(row)
+ 
 
     customers = (
         db.query(Customer)
@@ -807,24 +796,7 @@ def get_customer_analytics(
     )
 
 
-    # total_revenue = (
-    #     db.query(
-    #         func.sum(
-    #             CustomerPurchaseSummary.total_revenue
-    #         )
-    #     )
-    #     .join(
-    #         Customer,
-    #         Customer.id ==
-    #         CustomerPurchaseSummary.customer_id
-    #     )
-    #     .filter(
-    #         Customer.company_id ==
-    #         current_user.company_id
-    #     )
-    #     .scalar()
-    #     or 0
-    # )
+ 
 
     average_customer_spend = (
         total_revenue / total
@@ -1164,28 +1136,4 @@ def get_customer_analytics(
 
     }
 
-
-# def update_customer_purchase_summary(db: Session, customer_id: int):
-
-#     print("===================================")
-#     print("SUMMARY FUNCTION CALLED")
-#     print("CUSTOMER =", customer_id)
-
-#     orders = (
-#         db.query(Order)
-#         .filter(
-#             Order.customer_id == customer_id,
-#             # Order.status == "Completed"
-#         )
-#         .all()
-#     )
-
-#     print("ORDERS =", len(orders))
-
-#     for o in orders:
-#         print(
-#             o.id,
-#             o.customer_id,
-#             o.status,
-#             o.total_amount
-#         )
+ 

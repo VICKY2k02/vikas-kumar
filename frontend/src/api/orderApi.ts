@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://127.0.0.1:8000/orders";
+const API = "http://127.0.0.1:8000/orders/";
 
 const getHeaders = () => {
 
@@ -48,7 +48,7 @@ export const getOrder = async (
 
     const res = await axios.get(
 
-        `${API}/${id}`,
+        `${API}${id}`,
 
         getHeaders()
 
@@ -96,7 +96,7 @@ export const updateOrder = async (
 
     const res = await axios.put(
 
-        `${API}/${id}`,
+        `${API}${id}`,
 
         data,
 
@@ -120,7 +120,7 @@ export const deleteOrder = async (
 
     const res = await axios.delete(
 
-        `${API}/${id}`,
+        `${API}${id}`,
 
         getHeaders()
 

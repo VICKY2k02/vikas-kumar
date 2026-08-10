@@ -27,11 +27,11 @@ interface Props {
 }
 
 // const COLORS = [
-    // "#1976d2",
-    // "#2e7d32",
-    // "#ed6c02",
-    // "#9c27b0",
-    // "#d32f2f"
+// "#1976d2",
+// "#2e7d32",
+// "#ed6c02",
+// "#9c27b0",
+// "#d32f2f"
 // ];
 
 export default function CustomerAnalyticsDashboard({
@@ -125,6 +125,7 @@ export default function CustomerAnalyticsDashboard({
 
                             <Typography variant="h5">
                                 ₹{analytics.total_revenue?.toLocaleString()}
+
                             </Typography>
 
                         </CardContent>
@@ -133,35 +134,37 @@ export default function CustomerAnalyticsDashboard({
 
 
                 <Grid item xs={12} sm={6} md={3}>
-    <Card>
-        <CardContent>
-            <Typography variant="body2">
-                Average Customer Spend
-            </Typography>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="body2">
+                                Average Customer Spend
+                            </Typography>
 
-            <Typography variant="h5">
-                ₹{analytics.average_customer_spend?.toFixed(2)}
-            </Typography>
-        </CardContent>
-    </Card>
-</Grid>
+                            <Typography variant="h5">
+                                ₹{analytics.average_customer_spend?.toFixed(2)}
+
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
 
 
-<Grid item xs={12} sm={6} md={3}>
-    <Card>
-        <CardContent>
-            <Typography variant="body2">
-                Avg Purchase Frequency
-            </Typography>
+                <Grid item xs={12} sm={6} md={3}>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="body2">
+                                Avg Purchase Frequency
+                            </Typography>
 
-            <Typography variant="h5">
-                {Number(
+                            <Typography variant="h5">
+                                {Number(
                     analytics.average_purchase_frequency || 0
                 ).toFixed(2)}
-            </Typography>
-        </CardContent>
-    </Card>
-</Grid>
+
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
 
             </Grid>
 
@@ -220,7 +223,7 @@ export default function CustomerAnalyticsDashboard({
 
                 {/* <Grid item xs={12} md={6}> */}
 
-                    {/* <Card>
+                {/* <Card>
 
                         <CardContent>
 

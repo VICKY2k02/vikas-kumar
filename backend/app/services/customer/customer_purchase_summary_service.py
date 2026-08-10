@@ -2,8 +2,6 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 
 from app.models.customer.customer_purchase_summary import CustomerPurchaseSummary
-# from app.models.sale import Sale
-# from app.models.sale_item import SaleItem
 from app.models.order import Order
 from app.models.order_item import OrderItem
 
@@ -32,29 +30,15 @@ def update_customer_purchase_summary(
 
         db.add(summary)
 
-    # sales = (
-    #     db.query(Sale)
-    #     .filter(Sale.customer_id == customer_id)
-    #     .all()
-    # )
 
-    # total_orders = len(sales)
 
-    # total_revenue = sum(
-    #     sale.total_amount
-    #     for sale in sales
 
-    # )
-
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-    print("SUMMARY FUNCTION CALLED")
-    print("CUSTOMER =", customer_id)
-    
     orders = (
         db.query(Order)
         .filter(Order.customer_id == customer_id)
         .all()
     )
+
 
     total_orders = len(orders)
 
@@ -63,19 +47,6 @@ def update_customer_purchase_summary(
         for order in orders
     )
 
-    # total_products = (
-    #     db.query(
-    #         func.sum(
-    #             SaleItem.quantity
-    #         )
-    #     )
-        # .join(
-        #     Sale,
-        #     Sale.id == SaleItem.sale_id
-        # )
-        # .filter(
-        #     Sale.customer_id == customer_id
-        # )
     total_products = (
         db.query(
             func.sum(
@@ -106,22 +77,19 @@ def update_customer_purchase_summary(
     first_purchase = None
     last_purchase = None
 
-    # if sales:
+
     if orders:
 
-        # ordered = sorted(
-        #     sales,
-        #     key=lambda x: x.sale_date
-        # )
+ 
         ordered = sorted(
             orders,
             key=lambda x: x.created_at
         )
 
-        # first_purchase = ordered[0].sale_date
-        # last_purchase = ordered[-1].sale_date
+
         first_purchase = ordered[0].created_at
         last_purchase = ordered[-1].created_at
+
 
     summary.total_orders = total_orders
 
@@ -134,6 +102,10 @@ def update_customer_purchase_summary(
     summary.first_purchase_date = first_purchase
 
     summary.last_purchase_date = last_purchase
+
+
+
+    db.add(summary) 
 
     db.commit()
 

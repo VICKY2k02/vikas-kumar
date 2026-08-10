@@ -5,8 +5,13 @@ import {
     Button,
     Paper,
     TextField,
-    Typography
+    Typography,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions
 } from "@mui/material";
+
 
 import AddIcon from "@mui/icons-material/Add";
 
@@ -15,7 +20,8 @@ import CreateOrderDialog from "../../components/orders/CreateOrderDialog";
 
 import {
     getOrders,
-    deleteOrder
+    deleteOrder,
+    updateOrder
 } from "../../api/orderApi";
 
 export default function OrdersPage() {
@@ -34,6 +40,22 @@ export default function OrdersPage() {
     const [search, setSearch] =
         useState("");
 
+
+
+    const [selectedOrder, setSelectedOrder] =
+        useState<any | null>(null);
+
+    const [editData, setEditData] = useState({
+        total_amount: "",
+        total_quantity: "",
+        payment_method: "",
+        status: ""
+    });
+
+    const [viewOpen, setViewOpen] = useState(false);
+
+    const [editOpen, setEditOpen] = useState(false);
+
     useEffect(() => {
 
         loadOrders();
@@ -41,46 +63,32 @@ export default function OrdersPage() {
     }, []);
 
     useEffect(() => {
-
-        if (!search) {
-
+        if (!search.trim()) {
             setFilteredOrders(orders);
-
             return;
-
         }
 
         const value = search.toLowerCase();
 
-        setFilteredOrders(
+        const filtered = orders.filter((order: any) =>
+            String(order.id).includes(value) ||
 
-            orders.filter(
+            String(order.customer_id).includes(value) ||
 
-                (order) =>
+            (order.customer_name ?? "")
+                .toLowerCase()
+                .includes(value) ||
 
-                    String(order.id)
-                        .includes(value)
+            (order.payment_method ?? "")
+                .toLowerCase()
+                .includes(value) ||
 
-                    ||
-
-                    String(order.customer_id)
-                        .includes(value)
-
-                    ||
-
-                    order.payment_method
-                        ?.toLowerCase()
-                        .includes(value)
-
-                    ||
-
-                    order.status
-                        ?.toLowerCase()
-                        .includes(value)
-
-            )
-
+            (order.status ?? "")
+                .toLowerCase()
+                .includes(value)
         );
+
+        setFilteredOrders(filtered);
 
     }, [search, orders]);
 
@@ -112,6 +120,31 @@ export default function OrdersPage() {
 
     };
 
+
+    const handleView = (order: any) => {
+
+        console.log(order);
+
+        setSelectedOrder(order);
+
+        setViewOpen(true);
+
+    };
+    const handleEdit = (order: any) => {
+
+        setSelectedOrder(order);
+
+        setEditData({
+            total_amount: order.total_amount,
+            total_quantity: order.total_quantity,
+            payment_method: order.payment_method,
+            status: order.status
+        });
+
+        setEditOpen(true);
+
+    };
+
     const handleDelete = async (
 
         order: any
@@ -133,6 +166,30 @@ export default function OrdersPage() {
         try {
 
             await deleteOrder(order.id);
+
+            loadOrders();
+
+        }
+
+        catch (err) {
+
+            console.log(err);
+
+        }
+
+    };
+
+
+    const handleUpdate = async () => {
+
+        try {
+
+            await updateOrder(
+                selectedOrder!.id,
+                editData
+            );
+
+            setEditOpen(false);
 
             loadOrders();
 
@@ -227,34 +284,145 @@ export default function OrdersPage() {
                 />
 
                 <OrderTable
-
                     orders={filteredOrders}
-
                     loading={loading}
-
-                    onView={(order) =>
-
-                        console.log(
-
-                            order
-
-                        )
-
-                    }
-
-                    onEdit={(order) =>
-
-                        console.log(
-
-                            order
-
-                        )
-
-                    }
-
+                    onView={handleView}
+                    onEdit={handleEdit}
                     onDelete={handleDelete}
-
                 />
+
+
+                {/* View Dialog */}
+                <Dialog
+                    open={viewOpen}
+                    onClose={() => setViewOpen(false)}
+                    maxWidth="sm"
+                    fullWidth
+                >
+                    <DialogTitle>
+                        Order Details
+                    </DialogTitle>
+
+                    <DialogContent>
+                        {selectedOrder && (
+                            <>
+                                <Typography>Order ID : {selectedOrder.id}</Typography>
+
+                                <Typography>
+                                    Customer : {selectedOrder.customer_name}
+                                </Typography>
+
+                                <Typography>
+                                    Amount : ₹{selectedOrder.total_amount}
+                                </Typography>
+
+                                <Typography>
+                                    Quantity : {selectedOrder.total_quantity}
+                                </Typography>
+
+                                <Typography>
+                                    Payment : {selectedOrder.payment_method}
+                                </Typography>
+
+                                <Typography>
+                                    Status : {selectedOrder.status}
+                                </Typography>
+                            </>
+                        )}
+                    </DialogContent>
+
+                    <DialogActions>
+                        <Button onClick={() => setViewOpen(false)}>
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                {/* Edit Dialog */}
+                <Dialog
+                    open={editOpen}
+                    onClose={() => setEditOpen(false)}
+                    maxWidth="sm"
+                    fullWidth
+                >
+                    <DialogTitle>
+                        Edit Order
+                    </DialogTitle>
+
+                    <DialogContent>
+
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            label="Total Amount"
+                            value={editData.total_amount}
+                            onChange={(e) =>
+                                setEditData({
+                                    ...editData,
+                                    total_amount: e.target.value
+                                })
+                            }
+                        />
+
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            label="Quantity"
+                            value={editData.total_quantity}
+                            onChange={(e) =>
+                                setEditData({
+                                    ...editData,
+                                    total_quantity: e.target.value
+                                })
+                            }
+                        />
+
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            label="Payment Method"
+                            value={editData.payment_method}
+                            onChange={(e) =>
+                                setEditData({
+                                    ...editData,
+                                    payment_method: e.target.value
+                                })
+                            }
+                        />
+
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            label="Status"
+                            value={editData.status}
+                            onChange={(e) =>
+                                setEditData({
+                                    ...editData,
+                                    status: e.target.value
+                                })
+                            }
+                        />
+
+                    </DialogContent>
+
+                    <DialogActions>
+
+                        <Button
+                            onClick={() => setEditOpen(false)}
+                        >
+                            Cancel
+                        </Button>
+
+                        <Button
+                            variant="contained"
+                            onClick={handleUpdate}
+                        >
+                            Update
+                        </Button>
+
+                    </DialogActions>
+
+                </Dialog>
 
             </Paper>
 

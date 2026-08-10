@@ -9,25 +9,91 @@ class Sale(Base):
 
     __tablename__ = "sales"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(
+        Integer,
+        primary_key=True,
+        index=True
+    )
 
-    company_id = Column(Integer, ForeignKey("companies.id"))
+    company_id = Column(
+        Integer,
+        nullable=False
+    )
+ 
+    invoice_number = Column(
+        String,
+        nullable=False,
+        unique=True,
+        index=True
+    )
 
-    invoice_number = Column(String, unique=True, nullable=False)
+    customer_id = Column(
+        Integer,
+        ForeignKey("customers.id"),
+        nullable=True
+    )
 
-    customer_name = Column(String)
+    customer_name = Column(
+        String,
+        nullable=True
+    )
 
-    sale_date = Column(DateTime, default=datetime.utcnow)
+    sale_date = Column(
+        DateTime,
+        default=datetime.utcnow
+    )
 
-    sales_channel = Column(String)
+    sales_channel = Column(
+        String,
+        nullable=True
+    )
 
-    payment_method = Column(String)
+    payment_method = Column(
+        String,
+        nullable=True
+    )
+ 
+    status = Column(
+        String,
+        default="Paid"
+    )
+ 
+    discount = Column(
+        Float,
+        default=0
+    )
 
-    total_amount = Column(Float)
+    tax = Column(
+        Float,
+        default=0
+    )
 
-    created_by = Column(Integer, ForeignKey("users.id"))
+    subtotal = Column(
+        Float,
+        default=0
+    )
 
-    created_at = Column(DateTime, default=datetime.utcnow)
+    total_amount = Column(
+        Float,
+        default=0
+    )
+
+   
+    notes = Column(
+        String,
+        nullable=True
+    )
+
+    created_by = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=True
+    )
+
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow
+    )
 
     updated_at = Column(
         DateTime,
@@ -40,3 +106,5 @@ class Sale(Base):
         back_populates="sale",
         cascade="all, delete"
     )
+ 
+    salesperson = relationship("User")

@@ -79,13 +79,6 @@ export default function CustomerTable({
 
     };
 
-    // const handleMenuClose = () => {
-
-    //     setAnchorEl(null);
-
-    //     setSelectedCustomer(null);
-
-    // };
 
     if (loading) {
 
@@ -104,6 +97,8 @@ export default function CustomerTable({
         );
 
     }
+
+    console.log(customers);
 
     return (
 
@@ -187,14 +182,12 @@ export default function CustomerTable({
                                 </TableCell>
 
                                 <TableCell>
-                                    {/* {customer.purchase_summary?.total_orders ?? 0} */}
-                                    { 2}
+                                    {customer.purchase_summary?.total_orders ?? 0}
 
                                 </TableCell>
 
                                 <TableCell>
-                                    {/* ₹{customer.purchase_summary?.total_revenue ?? 0} */}
-                                    { 100000}
+                                    ₹{customer.purchase_summary?.total_revenue ?? 0}
 
                                 </TableCell>
 
@@ -227,106 +220,7 @@ export default function CustomerTable({
                 </TableBody>
 
             </Table>
-            {/* 
-            <Menu
 
-                anchorEl={anchorEl}
-
-                open={Boolean(anchorEl)}
-
-                onClose={handleMenuClose}
-
-            >
-
-                <MenuItem
-
-                    onClick={() => {
-
-                        console.log(
-
-                            "Profile",
-
-                            selectedCustomer
-
-                        );
-
-                        handleMenuClose();
-
-                    }}
-
-                >
-
-                    View Profile
-
-                </MenuItem>
-
-                <MenuItem
-
-                    onClick={() => {
-
-                        console.log(
-
-                            "Edit",
-
-                            selectedCustomer
-
-                        );
-
-                        handleMenuClose();
-
-                    }}
-
-                >
-
-                    Edit
-
-                </MenuItem>
-
-                <MenuItem
-
-                    onClick={() => {
-
-                        console.log(
-
-                            "Status",
-
-                            selectedCustomer
-
-                        );
-
-                        handleMenuClose();
-
-                    }}
-
-                >
-
-                    Activate / Deactivate
-
-                </MenuItem>
-
-                <MenuItem
-
-                    onClick={() => {
-
-                        console.log(
-
-                            "Delete",
-
-                            selectedCustomer
-
-                        );
-
-                        handleMenuClose();
-
-                    }}
-
-                >
-
-                    Delete
-
-                </MenuItem>
-
-            </Menu> */}
 
             <Menu
 
@@ -339,16 +233,16 @@ export default function CustomerTable({
             >
 
                 <MenuItem
-    onClick={() => {
+                    onClick={() => {
 
-        navigate(`/customers/${selectedCustomer.id}`);
+                        navigate(`/customers/${selectedCustomer.id}`);
 
-        handleClose();
+                        handleClose();
 
-    }}
->
-    View Profile
-</MenuItem>
+                    }}
+                >
+                    View Profile
+                </MenuItem>
 
                 <MenuItem
 

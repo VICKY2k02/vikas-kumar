@@ -6,7 +6,9 @@ import {
     TableHead,
     TableRow,
     Paper,
-    IconButton
+    IconButton,
+    Chip,
+    Skeleton
 } from "@mui/material";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -17,6 +19,8 @@ interface Props {
 
     sales: any[];
 
+    loading?: boolean;
+
     onView: (sale: any) => void;
 
     onEdit: (sale: any) => void;
@@ -25,9 +29,26 @@ interface Props {
 
 }
 
+function statusColor(status: string) {
+
+    switch (status) {
+        case "Paid":
+            return "success";
+        case "Pending":
+            return "warning";
+        case "Refunded":
+        case "Cancelled":
+            return "error";
+        default:
+            return "default";
+    }
+}
+
 export default function SalesTable({
 
     sales,
+
+    loading,
 
     onView,
 
@@ -50,41 +71,15 @@ export default function SalesTable({
 
                     <TableRow>
 
-                        <TableCell>
-                            Invoice
-                        </TableCell>
-
-                        <TableCell>
-                            Customer
-                        </TableCell>
-
-                        <TableCell>
-                            Product
-                        </TableCell>
-
-                        <TableCell>
-                            Qty
-                        </TableCell>
-
-                        <TableCell>
-                            Total
-                        </TableCell>
-
-                        <TableCell>
-                            Channel
-                        </TableCell>
-
-                        <TableCell>
-                            Payment
-                        </TableCell>
-
-                        <TableCell>
-                            Date
-                        </TableCell>
-
-                        <TableCell align="center">
-                            Actions
-                        </TableCell>
+                        <TableCell>Invoice</TableCell>
+                        <TableCell>Customer</TableCell>
+                        <TableCell>Items</TableCell>
+                        <TableCell>Total</TableCell>
+                        <TableCell>Channel</TableCell>
+                        <TableCell>Payment</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Date</TableCell>
+                        <TableCell align="center">Actions</TableCell>
 
                     </TableRow>
 
@@ -92,7 +87,27 @@ export default function SalesTable({
 
                 <TableBody>
 
-                    {
+                    {loading ? (
+
+                        Array.from({ length: 5 }).map((_, i) => (
+                            <TableRow key={i}>
+                                {Array.from({ length: 9 }).map((__, j) => (
+                                    <TableCell key={j}>
+                                        <Skeleton variant="text" />
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))
+
+                    ) : (sales?.length ?? 0) === 0 ? (
+
+                        <TableRow>
+                            <TableCell colSpan={9} align="center" sx={{ py: 4 }}>
+                                No Sales Found
+                            </TableCell>
+                        </TableRow>
+
+                    ) : (
 
                         sales.map((sale) => (
 
@@ -101,52 +116,44 @@ export default function SalesTable({
                             >
 
                                 <TableCell>
-
                                     {sale.invoice_number}
-
                                 </TableCell>
 
                                 <TableCell>
-
                                     {sale.customer_name}
-
                                 </TableCell>
 
                                 <TableCell>
-
-                                    {sale.product_name}
-
+                                    {sale.item_count ?? sale.items?.length ?? 0}
                                 </TableCell>
 
                                 <TableCell>
-
-                                    {sale.quantity}
-
-                                </TableCell>
-
-                                <TableCell>
-
                                     ₹{sale.total_amount}
-
                                 </TableCell>
 
                                 <TableCell>
-
                                     {sale.sales_channel}
-
                                 </TableCell>
 
                                 <TableCell>
-
                                     {sale.payment_method}
+                                </TableCell>
 
+                                <TableCell>
+                                    <Chip
+                                        size="small"
+                                        label={sale.status || "-"}
+                                        color={statusColor(sale.status) as any}
+                                    />
                                 </TableCell>
 
                                 <TableCell>
 
-                                    {new Date(
-                                        sale.sale_date
-                                    ).toLocaleDateString()}
+                                    {sale.sale_date
+                                        ? new Date(
+                                            sale.sale_date
+                                        ).toLocaleDateString()
+                                        : "-"}
 
                                 </TableCell>
 
@@ -191,7 +198,7 @@ export default function SalesTable({
 
                         ))
 
-                    }
+                    )}
 
                 </TableBody>
 

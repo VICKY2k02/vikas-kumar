@@ -45,7 +45,6 @@ def create_order(
     db.commit()
     db.refresh(obj)
 
-    # print("Calling update_customer_purchase_summary")
 
     update_customer_purchase_summary(
         db,
@@ -151,12 +150,13 @@ def update_order(
     db.commit()
     db.refresh(order)
 
-    # print("Calling update_customer_purchase_summary")
+    
 
     update_customer_purchase_summary(
         db,
         order.customer_id
     )
+
 
     db.add(
         AuditLog(
@@ -195,7 +195,6 @@ def delete_order(
 
     db.commit()
 
-    # print("Calling update_customer_purchase_summary")
 
     update_customer_purchase_summary(
         db,
@@ -218,100 +217,98 @@ def delete_order(
 # -----------------------------------------
 # Update Customer Purchase Summary
 # -----------------------------------------
-# def update_customer_purchase_summary(
-#     db: Session,
-#     customer_id: int
-# ):
+def update_customer_purchase_summary(
+    db: Session,
+    customer_id: int
+):
 
-#     print("================================")
-#     print("UPDATE SUMMARY CALLED")
-#     print("Customer :", customer_id)
+   
 
-#     orders = (
-#         db.query(Order)
-#         .filter(
-#             Order.customer_id == customer_id,
-#             # Order.status == "Completed"
-#         )
-#         .all()
-#     )
+    orders = (
+        db.query(Order)
+        .filter(
+            Order.customer_id == customer_id,
+            # Order.status == "Completed"
+        )
+        .all()
+    )
 
-#     total_orders = len(orders)
+    total_orders = len(orders)
 
-#     total_revenue = sum(
-#         o.total_amount for o in orders
-#     )
+    total_revenue = sum(
+        o.total_amount for o in orders
+    )
 
-#     total_quantity = sum(
-#         o.total_quantity for o in orders
-#     )
+    total_quantity = sum(
+        o.total_quantity for o in orders
+    )
 
-#     average_order = (
-#         total_revenue / total_orders
-#         if total_orders
-#         else 0
-#     )
+    average_order = (
+        total_revenue / total_orders
+        if total_orders
+        else 0
+    )
 
-#     first_purchase = (
-#         min(o.created_at for o in orders)
-#         if orders
-#         else None
-#     )
+    first_purchase = (
+        min(o.created_at for o in orders)
+        if orders
+        else None
+    )
 
-#     last_purchase = max(
-#         (order.created_at for order in orders),
-#         default=None
-#     )
+    last_purchase = max(
+        (order.created_at for order in orders),
+        default=None
+    )
 
-#     purchase_frequency = total_orders
+    purchase_frequency = total_orders
 
-#     summary = (
-#         db.query(CustomerPurchaseSummary)
-#         .filter(
-#             CustomerPurchaseSummary.customer_id == customer_id
-#         )
-#         .first()
-#     )
+    summary = (
+        db.query(CustomerPurchaseSummary)
+        .filter(
+            CustomerPurchaseSummary.customer_id == customer_id
+        )
+        .first()
+    )
 
-#     if not summary:
+    if not summary:
 
-#         summary = CustomerPurchaseSummary(
-#             customer_id=customer_id
-#         )
+        summary = CustomerPurchaseSummary(
+            customer_id=customer_id
+        )
 
-#         db.add(summary)
+        db.add(summary)
 
-#     summary.total_orders = total_orders
-#     summary.total_revenue = total_revenue
-#     summary.total_products_purchased = total_quantity
-#     summary.average_order_value = average_order
-#     summary.purchase_frequency = purchase_frequency
-#     summary.first_purchase_date = first_purchase
-#     summary.last_purchase_date = last_purchase
-#     summary.updated_at = datetime.utcnow()
+    summary.total_orders = total_orders
+    summary.total_revenue = total_revenue
+    summary.total_products_purchased = total_quantity
+    summary.average_order_value = average_order
+    summary.purchase_frequency = purchase_frequency
+    summary.first_purchase_date = first_purchase
+    summary.last_purchase_date = last_purchase
+    summary.updated_at = datetime.utcnow()
 
-#     if summary.total_orders == 1:
+    if summary.total_orders == 1:
 
-#         customer = (
-#             db.query(Customer)
-#             .filter(
-#                 Customer.id == summary.customer_id
-#             )
-#             .first()
-#         )
+        customer = (
+            db.query(Customer)
+            .filter(
+                Customer.id == summary.customer_id
+            )
+            .first()
+        )
 
-#         if customer:
+        if customer:
 
-#             db.add(
-#                 Notification(
-#                     company_id=customer.company_id,
-#                     title="First Purchase",
-#                     message=f"{customer.full_name} completed the first purchase.",
-#                     type="Customer"
-#                 )
-#             )
+            db.add(
+                Notification(
+                    company_id=customer.company_id,
+                    title="First Purchase",
+                    message=f"{customer.full_name} completed the first purchase.",
+                    type="Customer"
+                )
+            )
 
-#     db.commit()
+    db.commit()
 
 
 
