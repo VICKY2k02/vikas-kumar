@@ -35,11 +35,14 @@ export interface InventoryStatus {
 }
 
 export interface DashboardResponse {
+
     summary: {
         total_revenue: number;
         total_orders: number;
-        total_products_sold: number;
+        total_items_sold: number;
         average_order_value: number;
+        total_discount: number;
+        total_tax: number;
         total_inventory_value: number;
         low_stock_products: number;
         out_of_stock_products: number;
@@ -47,8 +50,52 @@ export interface DashboardResponse {
     };
 
     revenue_trend: any[];
+
+    weekly_revenue: {
+        period: string;
+        revenue: number;
+    }[];
+
+    monthly_revenue: {
+        period: string;
+        revenue: number;
+    }[];
+
+
+
     sales_trend: any[];
-    top_products: any[];
-    category_distribution: any[];
+
+    sales_vs_orders: {
+        date: string;
+        revenue: number;
+        orders: number;
+    }[];
+
+    top_products: {
+        product: string;
+        quantity: number;
+        revenue: number;
+    }[];
+
+    top_customers: {
+        customer: string;
+        orders: number;
+        total_spend: number;
+        average_order_value: number;
+    }[];
+
+    payment_method_analysis: {
+        payment_method: string;
+        transactions: number;
+        revenue: number;
+    }[];
+
+
+
+    category_distribution: {
+        category: string;
+        value: number;
+    }[];
+
     inventory_status_distribution: any[];
 }

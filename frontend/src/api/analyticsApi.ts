@@ -6,40 +6,49 @@ const API = axios.create({
 
 API.interceptors.request.use((config) => {
 
-    const token = localStorage.getItem("access_token");
+    const token =
+        localStorage.getItem("access_token");
 
     if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization =
+            `Bearer ${token}`;
     }
 
     return config;
 });
 
+
 export const getDashboardSummary = () => {
-    return axios.get(`${API}/analytics/dashboard`, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-    });
+    return API.get("/analytics/dashboard");
 };
 
 
-export const getDashboardAnalytics = (params?: any) =>
-    API.get("/analytics/dashboard", {
-        params
-    });
+export const getDashboardAnalytics = (
+    params?: any
+) => {
 
+    return API.get(
+        "/analytics/dashboard",
+        {
+            params
+        }
+    );
+};
 
 
 export const getProducts = async () => {
-    return await API.get("/products");
+
+    return API.get("/products");
+
 };
 
+
 export const exportAnalytics = (
-    format: string,
+    format: "csv" | "pdf",
     filters: any
-) =>
-    API.get(
+) => {
+
+    return API.get(
         `/analytics/export/${format}`,
         {
             params: filters,
@@ -47,6 +56,4 @@ export const exportAnalytics = (
         }
     );
 
-
-
-
+};

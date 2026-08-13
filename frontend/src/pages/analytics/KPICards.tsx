@@ -20,7 +20,7 @@ const cards = [
     },
     {
         title: "Products Sold",
-        key: "total_products_sold"
+        key: "total_items_sold"
     },
     {
         title: "Average Order Value",
@@ -41,6 +41,18 @@ const cards = [
     {
         title: "Categories",
         key: "total_categories"
+    },
+    // {
+    //     title: "Total Items Sold",
+    //     key: "total_items_sold"
+    // },
+    {
+        title: "Total Discount",
+        key: "total_discount"
+    },
+    {
+        title: "Total Tax",
+        key: "total_tax"
     }
 ];
 

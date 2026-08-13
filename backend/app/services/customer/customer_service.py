@@ -1,3 +1,5 @@
+from fastapi import HTTPException
+
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from sqlalchemy import func, extract
@@ -54,43 +56,30 @@ def create_customer(
 
     if existing:
         raise HTTPException(
-
-        status_code=409,
-
-        detail="Email already exists"
-
+            status_code=409,
+            detail="Email or Phone already exists"
         )
 
 
 
     obj = Customer(
-
         company_id=current_user.company_id,
-
         customer_id=generate_customer_id(db),
 
         full_name=customer.full_name,
-
         email=customer.email,
-
         phone=customer.phone,
 
         gender=customer.gender,
-
         date_of_birth=customer.date_of_birth,
 
         address=customer.address,
-
         city=customer.city,
-
         state=customer.state,
-
         country=customer.country,
-
         postal_code=customer.postal_code,
 
         customer_type=customer.customer_type,
-
         preferred_sales_channel=customer.preferred_sales_channel,
 
         status="Active"

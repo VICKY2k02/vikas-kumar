@@ -52,7 +52,7 @@ export default function AddCustomerDialog({
 
         postal_code: "",
 
-        customer_type: "Retail",
+        customer_type: "New",
 
         preferred_sales_channel: "Store",
 
@@ -98,50 +98,51 @@ export default function AddCustomerDialog({
     }
 
     const handleSave = async () => {
+    if (
+        errors.full_name ||
+        errors.email ||
+        errors.phone
+    ) {
+        return;
+    }
 
-        if (
-            errors.full_name ||
-            errors.email ||
-            errors.phone
-        ) {
-            return;
-        }
+    try {
+        console.log("CUSTOMER PAYLOAD:", form);
 
-        await createCustomer(form);
+        const response = await createCustomer(form);
+
+        console.log("CUSTOMER CREATED:", response);
 
         setForm({
-
             full_name: "",
-
             email: "",
-
             phone: "",
-
             date_of_birth: "",
-
             gender: "",
-
             address: "",
-
             city: "",
-
             state: "",
-
             country: "",
-
             postal_code: "",
-
-            customer_type: "Retail",
-
+            customer_type: "New",
             preferred_sales_channel: "Store",
-
             status: "Active"
-
         });
 
         onClose();
 
-    };
+    } catch (error: any) {
+        console.error(
+            "CREATE CUSTOMER ERROR:",
+            error.response?.data
+        );
+
+        console.error(
+            "STATUS:",
+            error.response?.status
+        );
+    }
+};
 
     return (
 
@@ -363,9 +364,9 @@ export default function AddCustomerDialog({
                 >
 
                     <MenuItem value="New">New</MenuItem>
-<MenuItem value="Regular">Regular</MenuItem>
-<MenuItem value="Loyal">Loyal</MenuItem>
-<MenuItem value="VIP">VIP</MenuItem>
+                    <MenuItem value="Regular">Regular</MenuItem>
+                    <MenuItem value="Loyal">Loyal</MenuItem>
+                    <MenuItem value="VIP">VIP</MenuItem>
 
                 </TextField>
 

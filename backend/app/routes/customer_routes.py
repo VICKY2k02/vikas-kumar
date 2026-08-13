@@ -188,34 +188,21 @@ def customer(
     response_model=CustomerResponse
 )
 def create(
-
     customer: CustomerCreate,
-
     db: Session = Depends(get_db),
-
     current_user=Depends(
         require_roles(
             "Company Admin",
             "Analyst"
         )
     )
-
 ):
+    return create_customer(
+        db,
+        customer,
+        current_user
+    )
 
-    try:
-
-        return create_customer(
-            db,
-            customer,
-            current_user
-        )
-
-    except Exception as e:
-
-        raise HTTPException(
-            status_code=400,
-            detail=str(e)
-        )
 
 
 # ------------------------------------
