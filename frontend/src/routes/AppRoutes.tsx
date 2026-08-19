@@ -16,7 +16,7 @@ import AddUser from "../components/layout/AddUser";
 
 import AuditLogs from "../pages/AuditLogs";
 import RoleProtectedRoute from "./RoleProtectedRoute";
-// import Profile from "../pages/Profile";
+
 
 import Categories from "../pages/categories/Categories";
 import Products from "../pages/products/Products";
@@ -35,6 +35,7 @@ import ForecastDashboard from "../pages/forecast/ForecastDashboard";
 
 import CustomerDetails from "../pages/customers/CustomerDetails";
 
+import InventoryForecast from "../pages/inventory/InventoryForecast";
 
 
 const AppRoutes = () => {
@@ -116,7 +117,7 @@ const AppRoutes = () => {
                     path="/users/add"
                     element={<AddUser />}
                 />
-{/* 
+                {/* 
                 <Route
                     path="/profile"
                     element={<Profile />}
@@ -127,18 +128,18 @@ const AppRoutes = () => {
                     element={<Sales />}
                 />
 
-<Route
+                <Route
 
-    path="/orders"
+                    path="/orders"
 
-    element={<OrdersPage />}
+                    element={<OrdersPage />}
 
-/>
+                />
 
-<Route
-    path="/forecast"
-    element={<ForecastDashboard />}
-/>
+                <Route
+                    path="/forecast"
+                    element={<ForecastDashboard />}
+                />
 
 
                 <Route
@@ -168,9 +169,16 @@ const AppRoutes = () => {
 
 
                 <Route
-    path="/customers/:id"
-    element={<CustomerDetails/>}
-/>
+                    path="/customers/:id"
+                    element={<CustomerDetails />}
+                />
+
+                <Route
+                    path="/inventory/forecast"
+                    element={<InventoryForecast />
+
+                    }
+                />
 
             </Route>
 

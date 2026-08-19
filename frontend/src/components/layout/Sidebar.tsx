@@ -170,6 +170,14 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                             <span>Demand Forecast</span>
                         </NavLink>
 
+                        <NavLink
+    to="/inventory/forecast"
+    onClick={closeSidebar}
+>
+    <TrendingUpIcon />
+    <span>Inventory Forecast</span>
+</NavLink>
+
 
 
 

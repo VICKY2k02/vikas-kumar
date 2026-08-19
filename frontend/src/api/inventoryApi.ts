@@ -14,23 +14,6 @@ export const createInventory = (data: any) =>
 
 /*  Stock Operations  */
 
-// export const addStock = (
-//     inventoryId: number,
-//     data: any
-// ) =>
-//     api.patch(
-//         `/inventory/${inventoryId}/add-stock`,
-//         data
-//     );
-
-// export const removeStock = (
-//     inventoryId: number,
-//     data: any
-// ) =>
-//     api.patch(
-//         `/inventory/${inventoryId}/remove-stock`,
-//         data
-//     );
 
 export const removeStock = (
     id: number,
@@ -41,14 +24,7 @@ export const removeStock = (
         data
     );
 
-// export const adjustStock = (
-//     inventoryId: number,
-//     data: any
-// ) =>
-//     api.patch(
-//         `/inventory/${inventoryId}/adjust-stock`,
-//         data
-//     );
+
 export const adjustStock = (
     id: number,
     data: any
@@ -60,19 +36,6 @@ export const adjustStock = (
 
 /*  Reorder Level  */
 
-// export const updateReorderLevel = (
-//     inventoryId: number,
-//     reorder_level: number
-// ) =>
-//     api.put(
-//         `/inventory/${inventoryId}/reorder-level`,
-//         {},
-//         {
-//             params: {
-//                 reorder_level
-//             }
-//         }
-//     );
 export const updateReorderLevel = (
     id: number,
     reorderLevel: number
@@ -94,14 +57,6 @@ export const getInventoryDashboard = () =>
 
 /*Movement History */
 
-// export const getInventoryMovements = (
-//     inventoryId: number
-// ) =>
-//     api.get(
-//         `/inventory/${inventoryId}/movements`
-//     );
-
-
 export const getInventoryMovements = (
     id: number
 ) =>
@@ -117,3 +72,11 @@ export const addStock = (
         `/inventory/${id}/add-stock`,
         data
     );
+
+
+
+
+
+
+
+
